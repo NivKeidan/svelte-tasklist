@@ -1,0 +1,22 @@
+switch stored data to have only date and times, without sections
+make sure that removes and text changes are saved properly
+add sort entries to sections on API load
+add inner section sorting
+create Time and Date components
+add ability to edit time and date components + including validation
+STOP HERE AND DECIDE WHAT IS THE MINIMUM FUNCTIONALITY SO I CAN START USING THIS
+(maybe online/offline usage? maybe android app usage? maybe online server?)``
+consider online/offline usage
+find server to use
+convert/maintain android app
+decide on final sections and implement them
+add date editing text recognition (check existing data)
+add time editing text recognition (check existing data)
+add date and time recognition on new text editing
+consider switching to save API to be only new change
+consider getting new IDs from the server? (or just max id, or something)
+add ability to move/increase/decrease date and time choice inside new entry
+add undo for actions
+
+add vocal insertion of new entries
+clicking c opens calendar view (to see dates and stuff)
