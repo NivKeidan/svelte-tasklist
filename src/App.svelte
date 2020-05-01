@@ -193,7 +193,7 @@
 
 <style>
 	:global(:root){
-		--date-color: blue;
+		--date-color: #4545ff;
 		--time-color: orange;
 	}
 </style>
