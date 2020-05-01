@@ -1,8 +1,10 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, getContext } from 'svelte';
     import Date from './Date.svelte';
     import Time from './Time.svelte';
     import {inputAdded} from './utils/forms';
+    import {CONTEXT_CONFIG} from './constants';
+    const sectionConfig = getContext(CONTEXT_CONFIG);
 
     const dispatch = createEventDispatcher();
     export let content = "This entry has no content wtf?!?!";
@@ -78,8 +80,12 @@
 </style>
 <div class="entry" class:dragged="{isDragged}">
     <button on:click={handleRemove} >X</button>
-    <Date bind:data={date} on:date-change={handleDateChanged}/>
-    <Time bind:data={time} on:time-change/>
+    {#if sectionConfig.showDate }
+        <Date bind:data={date} on:date-change={handleDateChanged}/>
+    {/if}
+    {#if sectionConfig.showTime }
+        <Time bind:data={time} on:time-change/>
+    {/if}
     {#if isEditing}
         <form on:submit|preventDefault={handleSubmit} class="edit-entry-form">
             <input use:inputAdded bind:value={content} on:blur={handleCancelEdit}

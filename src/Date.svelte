@@ -63,7 +63,7 @@
 
 <style>
     .date {
-        color: blue;
+        color: var(--date-color);
     }
 
     .edit-date-form {

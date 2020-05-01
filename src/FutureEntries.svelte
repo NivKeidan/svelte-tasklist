@@ -1,6 +1,14 @@
 <script>
     import Section from './Section.svelte';
+    import {setContext} from 'svelte';
+    import {CONTEXT_CONFIG} from './constants';
     export let entries = [];
+
+
+    setContext(CONTEXT_CONFIG, {
+        showDate: true,
+        showTime: false,
+    });
 </script>
 
 <style>

@@ -11,7 +11,6 @@
     });
 
     function reSort() {
-        console.log("resorting " + name);
         entries.sort((a,b) => {
             if (a.date === b.date)
                 return a.time - b.time;

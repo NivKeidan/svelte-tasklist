@@ -63,7 +63,7 @@
 
 <style>
     .time {
-        color: orange;
+        color: var(--time-color);
     }
 
     .edit-time-form {

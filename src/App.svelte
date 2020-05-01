@@ -1,12 +1,14 @@
 <script>
 	import {onMount} from 'svelte';
+	import {getDaysFromToday, getSection} from './utils/time';
+	import { SECTIONS } from './constants';
+
 	import TodayEntries from './TodayEntries.svelte';
 	import UpcomingEntries from './UpcomingEntries.svelte';
 	import FutureEntries from './FutureEntries.svelte';
 	import EntryInput from './EntryInput.svelte';
 	import Header from './Header.svelte';
-	import {getDaysFromToday, getSection} from './utils/time';
-	import { SECTIONS } from './constants';
+
 
 	let dailyEntries = [];
 	let weeklyEntries = [];
@@ -53,6 +55,7 @@
 	}
 
 	async function updateSection(section) {
+		// Weird Svelte hacks to make the dom reflect changes
 		switch (section) {
 			case SECTIONS.DAILY:
 				dailyEntries = dailyEntries;
@@ -72,6 +75,12 @@
 	function insertEntry(section, entry, saveChanges=true) {
 		let sectionObject = getEntriesObject(section);
 		sectionObject.push(entry);
+		sectionObject.sort((a,b) => {
+			if (a.date === b.date)
+				return a.time - b.time;
+			else
+				return a.date - b.date;
+		});
 		updateSection(section).then(() => {
 			if (saveChanges)
 				saveEntries();
@@ -207,6 +216,10 @@
 </script>
 
 <style>
+	:global(:root){
+		--date-color: blue;
+		--time-color: orange;
+	}
 </style>
 
 <div class="app">

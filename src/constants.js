@@ -3,3 +3,5 @@ export const SECTIONS = {
     UPCOMING: 2,
     FUTURE: 3
 };
+
+export const CONTEXT_CONFIG = "section-config-context";

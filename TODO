@@ -1,16 +1,14 @@
+color recognized text and date on runtime
+add option to choose if multiple options are identified
+add more input date and time recognition
+work a bit on design, make things bigger and niceier
 
 consider online/offline usage
 find server to use
-present date more nicely
 convert/maintain android app
 decide on final sections and implement them
-add date editing text recognition (check existing data)
-add time editing text recognition (check existing data)
-add date and time recognition on new text editing
 consider switching to save API to be only new change
 consider getting new IDs from the server? (or just max id, or something)
-add ability to move/increase/decrease date and time choice inside new entry
 add undo for actions
-
 add vocal insertion of new entries
 clicking c opens calendar view (to see dates and stuff)
