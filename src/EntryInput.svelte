@@ -1,13 +1,38 @@
 <script>
     import { createEventDispatcher } from 'svelte';
+    import { getDefaultDate, getDaysFromToday, getDefaultTime } from './utils/time';
     const dispatch = createEventDispatcher();
     let text = "";
 
     function handleSubmit() {
         if (text !== "") {
-            dispatch('new-entry', text);
+            let date = extractDate(text);
+            let time = extractTime(text);
+            dispatch('new-entry', {text, date, time});
             text = "";
         }
+    }
+
+    function extractDate(data) {
+        if (data.toLowerCase().includes('today')) {
+            return getDefaultDate();
+        }
+        if (data.toLowerCase().includes('upcoming')) {
+            return getDaysFromToday(5);
+        }
+        return getDefaultDate();
+    }
+
+    function extractTime(data) {
+        const regex = RegExp("\\b[0-9]{4}\\b");
+        let values = data.match(regex);
+        if (values === null)
+            return getDefaultTime();
+        return values[0];
+    }
+
+    function isEntryUpcoming(newEntryText) {
+        return newEntryText.toLowerCase().includes('upcoming');
     }
 </script>
 

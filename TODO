@@ -1,10 +1,7 @@
-add inner section sorting
-create Time and Date components
-add ability to edit time and date components + including validation
-STOP HERE AND DECIDE WHAT IS THE MINIMUM FUNCTIONALITY SO I CAN START USING THIS
-(maybe online/offline usage? maybe android app usage? maybe online server?)``
+
 consider online/offline usage
 find server to use
+present date more nicely
 convert/maintain android app
 decide on final sections and implement them
 add date editing text recognition (check existing data)

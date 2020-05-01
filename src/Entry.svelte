@@ -1,5 +1,9 @@
 <script>
     import { createEventDispatcher } from 'svelte';
+    import Date from './Date.svelte';
+    import Time from './Time.svelte';
+    import {inputAdded} from './utils/forms';
+
     const dispatch = createEventDispatcher();
     export let content = "This entry has no content wtf?!?!";
     export let date = "00000000";
@@ -8,6 +12,10 @@
     let previous = "";
     let isEditing = false;
     let isDragged = false;
+
+    function handleDateChanged(e) {
+        dispatch('date-change', {entryId: id})
+    }
 
     function handleRemove() {
         dispatch('remove-entry', {id: id});
@@ -29,13 +37,11 @@
     }
 
     function handleCancelEdit() {
-        isEditing = false;
-        content = previous;
-        previous = "";
-    }
-
-    function inputAdded(el) {
-        el.focus();
+        if (isEditing) {
+            isEditing = false;
+            content = previous;
+            previous = "";
+        }
     }
 
     function handleDragStart(e) {
@@ -69,21 +75,14 @@
         display: inline-block;
     }
 
-    .date {
-        color: blue;
-    }
-
-    .time {
-        color: orange;
-    }
 </style>
 <div class="entry" class:dragged="{isDragged}">
     <button on:click={handleRemove} >X</button>
-    <span class="date">{date}</span>
-    <span class="time">{time}</span>
+    <Date bind:data={date} on:date-change={handleDateChanged}/>
+    <Time bind:data={time} on:time-change/>
     {#if isEditing}
         <form on:submit|preventDefault={handleSubmit} class="edit-entry-form">
-            <input use:inputAdded bind:value={content} on:blur={handleSubmit}
+            <input use:inputAdded bind:value={content} on:blur={handleCancelEdit}
                    on:keydown={handleKeyDown}/>
         </form>
     {:else}

@@ -1,9 +1,11 @@
 <script>
-    import {inputAdded} from './utils_forms';
+    import {inputAdded} from './utils/forms';
+    import { createEventDispatcher } from 'svelte';
 
     export let data = "";
     let inputValue = "";
     let isEditing = false;
+    const dispatch = createEventDispatcher();
 
     function handleKeyDown(e) {
         if (e.key === 'Escape') {
@@ -21,9 +23,14 @@
     }
 
     function handleSubmit(e) {
+        if (data === inputValue) {
+            cancelEdit();
+            return
+        }
         if (validateInput()) {
             data = inputValue;
             isEditing = false;
+            dispatch('date-change', {newDate: inputValue});
         }
     }
 
@@ -62,11 +69,16 @@
     .edit-date-form {
         display: inline-block;
     }
+
+    .edit-date-input {
+        max-width: 10ch;
+    }
 </style>
 
 {#if isEditing}
     <form on:submit|preventDefault={handleSubmit} class="edit-date-form">
-        <input use:inputAdded bind:value={inputValue} on:keydown={handleKeyDown}/>
+        <input maxlength="8" class="edit-date-input" use:inputAdded bind:value={inputValue} on:keydown={handleKeyDown}
+            on:blur={cancelEdit}/>
     </form>
 {:else}
     <span class="date" on:click={handleClick}>{data}</span>

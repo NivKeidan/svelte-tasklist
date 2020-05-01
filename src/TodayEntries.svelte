@@ -7,5 +7,5 @@
 </style>
 
 <div class="entries-today">
-    <Section name="Daily" bind:entries on:drag-drop on:drag-start on:section-changed/>
+    <Section name="Daily" bind:entries on:date-change on:drag-drop on:drag-start on:section-changed/>
 </div>
