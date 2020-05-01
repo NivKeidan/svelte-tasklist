@@ -1,6 +1,6 @@
 <script>
     import {setContext} from 'svelte';
-    import {CONTEXT_CONFIG} from './constants';
+    import {CONTEXT_CONFIG, SECTIONS} from './constants';
     import Section from './Section.svelte';
     setContext(CONTEXT_CONFIG, {
         showDate: false,
@@ -16,5 +16,5 @@
 </style>
 
 <div class="entries-today">
-    <Section name="Daily" bind:entries on:date-change on:drag-drop on:drag-start on:section-changed/>
+    <Section name={SECTIONS.DAILY} bind:entries on:date-change on:drag-drop on:drag-start on:section-changed/>
 </div>

@@ -1,7 +1,7 @@
 <script>
     import Section from './Section.svelte';
     import {setContext} from 'svelte';
-    import {CONTEXT_CONFIG} from './constants';
+    import {CONTEXT_CONFIG, SECTIONS} from './constants';
     export let entries = [];
 
 
@@ -15,5 +15,5 @@
 </style>
 
 <div class="entries-future">
-    <Section name="Future" bind:entries on:date-change on:drag-drop on:drag-start on:section-changed/>
+    <Section name={SECTIONS.FUTURE} bind:entries on:date-change on:drag-drop on:drag-start on:section-changed/>
 </div>

@@ -1,24 +1,10 @@
 <script>
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
     import Entry from './Entry.svelte';
     export let entries = [];
     export let name = "";
     let dragCounter = 0;
-
-    onMount( () => {
-        reSort();
-    });
-
-    function reSort() {
-        entries.sort((a,b) => {
-            if (a.date === b.date)
-                return a.time - b.time;
-            else
-                return a.date - b.date;
-        });
-        entries = entries;
-    }
 
     function handleRemoveEntry(event) {
         entries = entries.filter(e => e.id !== event.detail.id);
@@ -26,13 +12,11 @@
     }
 
     function sectionChanged() {
-        dispatch("section-changed", {});
-        reSort();
+        dispatch("section-changed", {section: name});
     }
 
     function handleDateChange(e) {
-        dispatch('date-change', {entryId: e.detail.entryId});
-        reSort();
+        dispatch('date-change', {section: name, entryId: e.detail.entryId});
     }
 
     function handleDragEnter(e) {
@@ -45,7 +29,11 @@
 
     function handleDragDrop(e) {
         dragCounter = 0;
-        dispatch('drag-drop', {});
+        dispatch('drag-drop', {section: name});
+    }
+
+    function handleDragStart(e) {
+        dispatch('drag-start', {section: name, entryId: e.detail.entryId})
     }
 
 </script>
@@ -71,10 +59,10 @@
     <div class="section-header"><u><b>{name} Tasks:</b></u></div>
     {#each entries as entry (entry.id)}
         <Entry on:remove-entry={handleRemoveEntry}
-               on:drag-start
+               on:drag-start={handleDragStart}
                on:entry-changed={sectionChanged}
                bind:content={entry.text} bind:date={entry.date}
                bind:time={entry.time} id={entry.id} on:date-change={handleDateChange}
-               on:time-change={reSort} />
+               on:time-change={sectionChanged} />
     {/each}
 </div>

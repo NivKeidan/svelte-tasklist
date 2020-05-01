@@ -1,6 +1,7 @@
 <script>
     import Section from './Section.svelte';
     import {CONTEXT_CONFIG} from './constants';
+    import {SECTIONS} from './constants';
     export let entries = [];
 
     import {setContext} from 'svelte';
@@ -8,11 +9,13 @@
         showDate: true,
         showTime: true,
     });
+
 </script>
 
 <style>
 </style>
 
 <div class="entries-upcoming">
-    <Section name="Weekly" bind:entries on:date-change on:drag-drop on:drag-start on:section-changed/>
+    <Section name={SECTIONS.UPCOMING} bind:entries
+             on:date-change on:drag-drop on:drag-start on:section-changed/>
 </div>

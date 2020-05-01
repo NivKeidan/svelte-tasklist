@@ -19,11 +19,11 @@
 
 	onMount( async () => {
 		await fetch("http://localhost:3333").then(r => r.json()).
-		then(data => sortToSections(data)).
+		then(data => populateSections(data)).
 		catch( e => console.log("failed getting data", e));
 	});
 
-	function sortToSections(data) {
+	function populateSections(data) {
 		data.forEach(e => insertNewEntry(e, false));
 	}
 
@@ -72,15 +72,20 @@
 		}
 	}
 
-	function insertEntry(section, entry, saveChanges=true) {
+	function sortSection(section) {
 		let sectionObject = getEntriesObject(section);
-		sectionObject.push(entry);
 		sectionObject.sort((a,b) => {
 			if (a.date === b.date)
 				return a.time - b.time;
 			else
 				return a.date - b.date;
 		});
+	}
+
+	function insertEntry(section, entry, saveChanges=true) {
+		let sectionObject = getEntriesObject(section);
+		sectionObject.push(entry);
+		sortSection(section);
 		updateSection(section).then(() => {
 			if (saveChanges)
 				saveEntries();
@@ -137,7 +142,13 @@
 		return sectionObject[ind];
 	}
 
-	// ---------- New Entry -------------
+	// ---------- Event Handlers -------------
+
+	function handleSectionChanged(e) {
+		// Called when entry text or time has changed
+		sortSection(e.detail.section);
+		saveEntries();
+	}
 
 	function handleNewEntry(event) {
 		let newEntry = {text: event.detail.text, id: generateNewId(),
@@ -145,72 +156,37 @@
 		insertNewEntry(newEntry);
 	}
 
-	// ---------- Date Change -------------
-
-	function handleDateChange(entryId, originSection) {
+	function handleDateChange(e) {
+		let entryId = e.detail.entryId;
+		let originSection = e.detail.section;
 		let entry = getEntryById(originSection, entryId);
 		removeEntryById(originSection, entryId, false);
 		insertNewEntry(entry);
 	}
 
-	function handleDateChangeInToday(e) {
-		handleDateChange(e.detail.entryId, SECTIONS.DAILY);
-	}
-
-	function handleDateChangeInUpcoming(e) {
-		handleDateChange(e.detail.entryId, SECTIONS.UPCOMING);
-	}
-
-	function handleDateChangeInFuture(e) {
-		handleDateChange(e.detail.entryId, SECTIONS.FUTURE);
-	}
-
-	// ---------- Drag and Drop -------------
-
-	function finalizeDrag(modifyEntryFn=null) {
-		let entry = getEntryById(dragOrigin, draggedEntryId);
-		removeEntryById(dragOrigin, draggedEntryId, false);
-		if (modifyEntryFn !== null) {
-			modifyEntryFn(entry);
-		}
-		insertNewEntry(entry);
-	}
-
-	function handleDailyDragDrop(e) {
-		if (dragOrigin !== SECTIONS.DAILY) {
-			finalizeDrag( (entry) => entry.date = getDaysFromToday(0));
-		}
-	}
-
-	function handleWeeklyDragDrop(e) {
-		if (dragOrigin !== SECTIONS.UPCOMING) {
-			finalizeDrag((entry) => entry.date = getDaysFromToday(5));
-		}
-	}
-
-	function handleFutureDragDrop(e) {
-		if (dragOrigin !== SECTIONS.FUTURE) {
-			finalizeDrag((entry) => entry.date = getDaysFromToday(30));
+	function handleDragDrop(e) {
+		const targetSection = e.detail.section;
+		if (dragOrigin !== targetSection) {
+			let entry = getEntryById(dragOrigin, draggedEntryId);
+			removeEntryById(dragOrigin, draggedEntryId, false);
+			switch (targetSection) {
+				case SECTIONS.DAILY:
+					entry.date = getDaysFromToday(0);
+					break;
+				case SECTIONS.UPCOMING:
+					entry.date = getDaysFromToday(5);
+					break;
+				case SECTIONS.FUTURE:
+					entry.date = getDaysFromToday(30);
+					break;
+			}
+			insertNewEntry(entry);
 		}
 	}
 
 	function handleDragStart(e) {
+		dragOrigin = e.detail.section;
 		draggedEntryId = e.detail.entryId;
-	}
-
-	function handleDailyDragStart(e) {
-		dragOrigin = SECTIONS.DAILY;
-		handleDragStart(e);
-	}
-
-	function handleWeeklyDragStart(e) {
-		dragOrigin = SECTIONS.UPCOMING;
-		handleDragStart(e);
-	}
-
-	function handleFutureDragStart(e) {
-		dragOrigin = SECTIONS.FUTURE;
-		handleDragStart(e);
 	}
 
 </script>
@@ -225,13 +201,13 @@
 <div class="app">
 	<Header/>
 	<EntryInput on:new-entry={handleNewEntry}/>
-	<TodayEntries bind:entries={dailyEntries} on:section-changed={saveEntries}
-				  on:drag-drop={handleDailyDragDrop} on:drag-start={handleDailyDragStart}
-				  on:date-change={handleDateChangeInToday}/>
-	<UpcomingEntries bind:entries={weeklyEntries} on:section-changed={saveEntries}
-					 on:drag-drop={handleWeeklyDragDrop} on:drag-start={handleWeeklyDragStart}
-					 on:date-change={handleDateChangeInUpcoming}/>
-	<FutureEntries bind:entries={futureEntries} on:section-changed={saveEntries}
-				   on:drag-drop={handleFutureDragDrop} on:drag-start={handleFutureDragStart}
-				   on:date-change={handleDateChangeInFuture}/>
+	<TodayEntries bind:entries={dailyEntries}
+				  on:section-changed={handleSectionChanged} on:drag-drop={handleDragDrop}
+				  on:drag-start={handleDragStart} on:date-change={handleDateChange}/>
+	<UpcomingEntries bind:entries={weeklyEntries} on:section-changed={handleSectionChanged}
+					 on:drag-drop={handleDragDrop} on:drag-start={handleDragStart}
+					 on:date-change={handleDateChange}/>
+	<FutureEntries bind:entries={futureEntries} on:section-changed={handleSectionChanged}
+				   on:drag-drop={handleDragDrop} on:drag-start={handleDragStart}
+				   on:date-change={handleDateChange}/>
 </div>
