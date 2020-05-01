@@ -4,45 +4,52 @@
 	import UpcomingEntries from './UpcomingEntries.svelte';
 	import EntryInput from './EntryInput.svelte';
 	import Header from './Header.svelte';
+	import {getDefaultDate, getDefaultTime, isWeekly} from './utils_time';
 
-	let entries = {
-		"Daily": [],
-		"Weekly": [],
-		};
-	let draggedEntryId = 0;
-	let draggedEntryOriginSection = "";
+	let dailyEntries = [];
+	let weeklyEntries = [];
+	let draggedEntry = {};
+	let dragSuccessCallback = null;
 
 	onMount( async () => {
 		await fetch("http://localhost:3333").
 		then(r => r.json()).
-		then( data => entries = data).
+		then( data => {
+			data.forEach(e => {
+				if (isWeekly(e.date))
+					weeklyEntries = [...weeklyEntries, e];
+				else
+					dailyEntries = [...dailyEntries, e];  // Daily is default
+				});
+			}).
 		catch( e => console.log("failed getting data", e));
 	});
 
 	function saveEntries() {
+		let allEntries = getAllEntries();
 		fetch("http://localhost:3333", {
 			method: "POST",
 			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify(entries),
-		}).then(r => r.json()).then(data => console.log("save success", data)).catch(err => console.log("save failed", err));
+			body: JSON.stringify(allEntries),
+		}).
+		then(data => console.log("save success", data)).
+		catch(err => console.log("save failed", err));
 	}
 
-	function getDefaultDate() {
-		let today = new Date();
-		return today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+	function getAllEntries() {
+		let all = [];
+		dailyEntries.forEach( e => all.push(e));
+		weeklyEntries.forEach( e => all.push(e));
+		return all;
 	}
 
-	function getDefaultTime() {
-		return "0000";
-	}
-	
 	function handleNewEntry(event) {
 		let newEntry = {text: event.detail, id: generateNewId(), date: getDefaultDate(), time: getDefaultTime()};
 
 		if (isEntryUpcoming(event.detail)) {
-			entries.Weekly = [...entries.Weekly, newEntry];
+			weeklyEntries = [...weeklyEntries, newEntry];
 		} else {  // default is Today Section
-			entries.Daily = [...entries.Daily, newEntry];
+			dailyEntries = [...dailyEntries, newEntry];
 		}
 		saveEntries();
 	}
@@ -57,29 +64,26 @@
 
 	function generateNewId() {
 		let highest = 0;
-		Object.keys(entries).forEach( section => {
-			entries[section].forEach( e => {
-				if (e.id > highest)
-					highest = e.id;
-			});
+		dailyEntries.forEach( e => {
+			if (e.id > highest)
+				highest = e.id;
+		});
+
+		weeklyEntries.forEach( e => {
+			if (e.id > highest)
+				highest = e.id;
 		});
 		return highest+1;
 	}
 
-	function handleDragDrop(e) {
-		let targetSectionName = e.detail.targetSectionName;
+	function handleDailyDragDrop(e) {
+		dailyEntries = [...dailyEntries, draggedEntry];
+		dragSuccessCallback().then( () => saveEntries() );
+	}
 
-		if (targetSectionName !== draggedEntryOriginSection) {
-			let targetIndex = findEntryIndexById(entries[draggedEntryOriginSection], draggedEntryId);
-			if (targetIndex !== -1) {
-				let draggedEntry = entries[draggedEntryOriginSection][targetIndex];
-				entries[targetSectionName] = [...entries[targetSectionName], draggedEntry];
-				entries[draggedEntryOriginSection] = [...entries[draggedEntryOriginSection].slice(0, targetIndex), ...entries[draggedEntryOriginSection].slice(targetIndex + 1)];
-			}
-		}
-		draggedEntryId = 0;
-		draggedEntryOriginSection = "";
-		saveEntries();
+	function handleWeeklyDragDrop(e) {
+		weeklyEntries = [...weeklyEntries, draggedEntry];
+		dragSuccessCallback().then( () => saveEntries() );
 	}
 
 	function findEntryIndexById(section, entryId) {
@@ -91,17 +95,22 @@
 		return -1;
 	}
 
-	function handleDragStart(e) {
-		draggedEntryId = e.detail.entryId;
-		draggedEntryOriginSection = getSectionNameByEntryId(draggedEntryId);
+	function handleDailyDragStart(e) {
+		let ind = findEntryIndexById(dailyEntries, e.detail.entryId);
+		draggedEntry = dailyEntries[ind];
+		dragSuccessCallback = async function () {
+			dailyEntries = dailyEntries.filter(e => e !== draggedEntry);
+			draggedEntry = null;
+		};
 	}
 
-	function getSectionNameByEntryId(entryId) {
-		let sections = Object.keys(entries);
-		for (let section of sections) {
-			if (entries[section].some( e => e.id === entryId))
-				return section;
-		}
+	function handleWeeklyDragStart(e) {
+		let ind = findEntryIndexById(weeklyEntries, e.detail.entryId);
+		draggedEntry = weeklyEntries[ind];
+		dragSuccessCallback = async function () {
+			dailyEntries = weeklyEntries.filter(e => e !== draggedEntry);
+			draggedEntry = null;
+		};
 	}
 
 </script>
@@ -112,6 +121,6 @@
 <div class="app">
 	<Header/>
 	<EntryInput on:new-entry={handleNewEntry}/>
-	<TodayEntries bind:entries={entries.Daily} on:section-changed={saveEntries} on:drag-drop={handleDragDrop} on:drag-start={handleDragStart}/>
-	<UpcomingEntries bind:entries={entries.Weekly} on:section-changed={saveEntries} on:drag-drop={handleDragDrop} on:drag-start={handleDragStart}/>
+	<TodayEntries bind:entries={dailyEntries} on:section-changed={saveEntries} on:drag-drop={handleDailyDragDrop} on:drag-start={handleDailyDragStart}/>
+	<UpcomingEntries bind:entries={weeklyEntries} on:section-changed={saveEntries} on:drag-drop={handleWeeklyDragDrop} on:drag-start={handleWeeklyDragStart}/>
 </div>

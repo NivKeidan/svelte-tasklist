@@ -1,6 +1,3 @@
-switch stored data to have only date and times, without sections
-make sure that removes and text changes are saved properly
-add sort entries to sections on API load
 add inner section sorting
 create Time and Date components
 add ability to edit time and date components + including validation
