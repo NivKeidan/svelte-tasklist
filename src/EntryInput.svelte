@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher, afterUpdate } from 'svelte';
-    import { getDefaultDate, getDaysFromToday, getDefaultTime } from './utils/time';
+    import { analyzeDateString, analyzeTimeString, DATE_REGEX, TIME_REGEX } from './utils/time';
     const dispatch = createEventDispatcher();
     let text = "";
     let dateStrings = [];
@@ -9,54 +9,39 @@
     let selectedDateIndex = 0;
 
     afterUpdate( () => {
-        dateStrings = extractDate(text);
-        timeStrings = extractTime(text);
+        dateStrings = extractDateStrings(text);
+        timeStrings = extractTimeStrings(text);
     });
 
     function handleSubmit() {
         if (text !== "") {
-            let date = getDefaultDate();
-            switch (dateStrings[selectedDateIndex]) {
-                case 'today':
-                    date = getDaysFromToday(0);
-                    break;
-                case 'upcoming':
-                    date = getDaysFromToday(5);
-                    break;
-            }
-
-            let time = getDefaultTime();
-            if (timeStrings.length > 0)
-                time = timeStrings[selectedTimeIndex];
+            let date = analyzeDateString(dateStrings[selectedDateIndex]);
+            let time = analyzeTimeString(timeStrings[selectedTimeIndex]);
 
             text = text.replace(dateStrings[selectedDateIndex], '');
-            text = text.replace(time, '');
+            text = text.replace(timeStrings[selectedTimeIndex], '');
 
             dispatch('new-entry', {text, date, time});
             text = "";
-            timeStrings = [];
-            dateStrings = [];
             selectedTimeIndex = 0;
             selectedDateIndex = 0;
         }
     }
 
-    function extractDate() {
-        const regex = RegExp("\\b(today|upcoming)\\b", "gi");
-        let vals = text.match(regex);
-        if (vals === null)
+    function extractDateStrings() {
+        let values = text.match(DATE_REGEX);
+        if (values === null)
             return [];
         else
-            return vals;
+            return values;
     }
 
-    function extractTime() {
-        const regex = RegExp("\\b[012][0-9][0-5][0-9]\\b", "g");
-        let vals = text.match(regex);
-        if (vals === null)
+    function extractTimeStrings() {
+        let values = text.match(TIME_REGEX);
+        if (values === null)
             return [];
         else
-            return vals;
+            return values;
     }
 
     function handleKeyDown(e) {
@@ -128,7 +113,7 @@
 
 </style>
 
-<div class="input">
+<div class="input" on:keydown={handleKeyDown}>
     <span class="inputs-found">
         {#each dateStrings as ds, i}
             <span class="input-date" class:date-selected="{i == selectedDateIndex}" on:click="{e => selectedDateIndex = i}">{ds}</span>
@@ -138,7 +123,6 @@
             <span class="input-time" class:time-selected="{i == selectedTimeIndex}" on:click="{e => selectedTimeIndex = i}">{ts}</span>
         {/each}
     </span>
-    <input bind:value={text} class="entry-input"
-         on:keydown={handleKeyDown}/>
+    <input bind:value={text} class="entry-input"/>
     <button class="btn-add" on:click={handleSubmit}>Add</button>
 </div>

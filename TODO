@@ -1,12 +1,10 @@
-add more input date and time recognition
 make design better
-
+decide on final sections and implement them
 make dragging better - be able to drag to between elements, or be more specific, make design better.. i dunno
 consider adding animations - for fun or practice
 consider online/offline usage
 find server to use
 convert/maintain android app
-decide on final sections and implement them
 consider switching to save API to be only new change
 consider getting new IDs from the server? (or just max id, or something)
 add undo for actions

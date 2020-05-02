@@ -1,0 +1,4 @@
+adding more date/time recognition patterns:
+    add to date/time regex in utils/time.js
+    add parsing to analyze functions in utils/time.js
+
