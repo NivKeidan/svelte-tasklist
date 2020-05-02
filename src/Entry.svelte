@@ -3,16 +3,16 @@
     import Date from './Date.svelte';
     import Time from './Time.svelte';
     import {inputAdded} from './utils/forms';
-    import {getDefaultDate, getDefaultTime} from './utils/time';
+    import {getDaysFromToday} from './utils/time';
+    import {NullTime} from './constants';
 
     const dispatch = createEventDispatcher();
     export let content = "This entry has no content wtf?!?!";
-    export let date = getDefaultDate();
-    export let time = getDefaultTime();
+    export let date = getDaysFromToday(0);
+    export let time = NullTime;
     export let id = 0;
     export let useDayNames = false;
     export let showDate = true;
-    export let showTime = true;
     export let oneLiner = false;
     let previous = "";
     let isEditing = false;
@@ -90,9 +90,7 @@
     {#if showDate }
         <Date bind:data={date} on:date-change={handleDateChanged} useDayName={useDayNames}/>
     {/if}
-    {#if showTime }
-        <Time bind:data={time} on:time-change/>
-    {/if}
+    <Time bind:data={time} on:time-change/>
     {#if isEditing}
         <form on:submit|preventDefault={handleSubmit} class="edit-entry-form">
             <input use:inputAdded bind:value={content} on:blur={handleCancelEdit}

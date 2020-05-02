@@ -1,12 +1,18 @@
 <script>
     import {inputAdded} from './utils/forms';
-    import {getDefaultTime} from './utils/time';
-    import {createEventDispatcher} from 'svelte';
+    import {NullTime} from './constants';
+    import {createEventDispatcher, onMount} from 'svelte';
 
     export let data = "";
+    export let show = true;
     let inputValue = "";
     let isEditing = false;
     const dispatch = createEventDispatcher();
+
+    onMount( async () => {
+        if (data === NullTime)
+            show = false;
+    });
 
     function handleKeyDown(e) {
         if (e.key === 'Escape') {
@@ -15,7 +21,7 @@
     }
 
     function handleClick(e) {
-        if (data === getDefaultTime())
+        if (data === NullTime)
             inputValue = "0000";
         else
             inputValue = data;
@@ -27,15 +33,16 @@
     }
 
     function handleSubmit(e) {
-        if (data === inputValue) {  // No change
+        if (inputValue === data) {  // No change
             cancelEdit();
-            return
         }
-        if (validateInput())
+        else if (inputValue === "")     // hide time
+            show = false;
+        else if (validateInput()) {  // accept input
+            show = true;
             data = inputValue;
-        else if (inputValue === "")
-            data = getDefaultTime();
-        else
+        }
+        else  // invalid input
             return;
         isEditing = false;
         dispatch("time-change", {});
@@ -88,7 +95,7 @@
                on:blur={cancelEdit}/>
     </form>
 {:else}
-    {#if data !== getDefaultTime() }
+    {#if show }
         <span class="time" on:click={handleClick}>{data}</span>
     {:else}
         <span class="time" on:click={handleClick}>---</span>

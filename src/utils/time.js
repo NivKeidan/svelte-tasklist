@@ -3,14 +3,6 @@ import { SECTIONS } from '../constants';
 export const DATE_REGEX = RegExp("\\b(today|tdy|tmrw|tomorrow|in [0-9]+ day[s]?)\\b", "gi");
 export const TIME_REGEX = RegExp("\\b[012][0-9][0-5][0-9]\\b", "g");
 
-export function getDefaultDate() {
-    return getTodayDateString();
-}
-
-export function getDefaultTime() {
-    return "9999";
-}
-
 export function getDaysFromToday(n) {
     let d = new Date();
     d.setDate(d.getDate() + n);
@@ -42,11 +34,11 @@ export function analyzeTimeString(timeString) {
         return timeString;
     return getDefaultTime;
 }
-
-function getTodayDateString() {
-    const today = new Date();
-    return dateToString(today);
-}
+//
+// function getTodayDateString() {
+//     const today = new Date();
+//     return dateToString(today);
+// }
 
 function dateToString(d) {
     const year = d.getFullYear();
