@@ -1,16 +1,17 @@
 <script>
-    import { createEventDispatcher, getContext } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     import Date from './Date.svelte';
     import Time from './Time.svelte';
     import {inputAdded} from './utils/forms';
-    import {CONTEXT_CONFIG} from './constants';
-    const sectionConfig = getContext(CONTEXT_CONFIG);
 
     const dispatch = createEventDispatcher();
     export let content = "This entry has no content wtf?!?!";
     export let date = "00000000";
     export let time = "0000";
     export let id = 0;
+    export let useDayNames = false;
+    export let showDate = true;
+    export let showTime = true;
     let previous = "";
     let isEditing = false;
     let isDragged = false;
@@ -34,7 +35,7 @@
         if (content === "")
             handleRemove();
         else {
-            dispatch("entry-changed", {});
+            dispatch("text-change", {});
         }
     }
 
@@ -80,10 +81,10 @@
 </style>
 <div class="entry" class:dragged="{isDragged}">
     <button on:click={handleRemove} >X</button>
-    {#if sectionConfig.showDate }
-        <Date bind:data={date} on:date-change={handleDateChanged} useDayName={sectionConfig.useDayName}/>
+    {#if showDate }
+        <Date bind:data={date} on:date-change={handleDateChanged} useDayName={useDayNames}/>
     {/if}
-    {#if sectionConfig.showTime }
+    {#if showTime }
         <Time bind:data={time} on:time-change/>
     {/if}
     {#if isEditing}

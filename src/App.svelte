@@ -4,11 +4,11 @@
 	import { SECTIONS } from './constants';
 
 	import TodayEntries from './TodayEntries.svelte';
+	import Section from './Section.svelte';
 	import UpcomingEntries from './UpcomingEntries.svelte';
 	import FutureEntries from './FutureEntries.svelte';
 	import EntryInput from './EntryInput.svelte';
 	import Header from './Header.svelte';
-
 
 	let dailyEntries = [];
 	let weeklyEntries = [];
@@ -211,13 +211,34 @@
 <div class="app">
 	<Header/>
 	<EntryInput on:new-entry={handleNewEntry}/>
-	<TodayEntries bind:entries={dailyEntries}
-				  on:section-changed={handleSectionChanged} on:drag-drop={handleDragDrop}
-				  on:drag-start={handleDragStart} on:date-change={handleDateChange}/>
-	<UpcomingEntries bind:entries={weeklyEntries} on:section-changed={handleSectionChanged}
-					 on:drag-drop={handleDragDrop} on:drag-start={handleDragStart}
-					 on:date-change={handleDateChange}/>
-	<FutureEntries bind:entries={futureEntries} on:section-changed={handleSectionChanged}
-				   on:drag-drop={handleDragDrop} on:drag-start={handleDragStart}
-				   on:date-change={handleDateChange}/>
+
+	<Section name={SECTIONS.DAILY} on:drag-drop={handleDragDrop}>
+		<span slot="entries">
+			<TodayEntries bind:entries={dailyEntries}
+						   on:section-change={handleSectionChanged}
+						   on:date-change={handleDateChange}
+						   on:drag-start={handleDragStart}
+			/>
+		</span>
+	</Section>
+
+	<Section name={SECTIONS.UPCOMING} on:drag-drop={handleDragDrop}>
+		<span slot="entries">
+			<UpcomingEntries bind:entries={weeklyEntries}
+						   on:section-change={handleSectionChanged}
+						   on:date-change={handleDateChange}
+						   on:drag-start={handleDragStart}
+			/>
+		</span>
+	</Section>
+
+	<Section name={SECTIONS.FUTURE} on:drag-drop={handleDragDrop}>
+		<span slot="entries">
+			<FutureEntries bind:entries={futureEntries}
+							  on:section-change={handleSectionChanged}
+							  on:date-change={handleDateChange}
+							  on:drag-start={handleDragStart}
+			/>
+		</span>
+	</Section>
 </div>

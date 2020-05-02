@@ -1,17 +1,44 @@
 <script>
-    import Section from './Section.svelte';
-    import {setContext} from 'svelte';
-    import {CONTEXT_CONFIG, SECTIONS, defaultConfig} from './constants';
-    export let entries = [];
+    import {createEventDispatcher} from 'svelte';
+    import Entry from './Entry.svelte';
+    import { SECTIONS } from './constants';
 
-    let config = Object.assign({}, defaultConfig);
-    config.showTime = false;
-    setContext(CONTEXT_CONFIG, config);
+    const dispatch = createEventDispatcher();
+
+    export let entries = [];
+    let dragCounter = 0;
+
+    function handleRemoveEntry(event) {
+        entries = entries.filter(e => e.id !== event.detail.id);
+        dispatch("entry-removed");
+    }
+
+    function handleDragStart(e) {
+        dispatch('drag-start', {section: SECTIONS.FUTURE, entryId: e.detail.entryId})
+    }
+
+    function handleDateChange(e) {
+        dispatch('date-change', {section: SECTIONS.FUTURE, entryId: e.detail.entryId});
+    }
+
+    function handleGeneralChange(e) {
+        dispatch('section-change', {section: SECTIONS.FUTURE});
+    }
+
 </script>
 
 <style>
 </style>
 
-<div class="entries-future">
-    <Section name={SECTIONS.FUTURE} bind:entries on:date-change on:drag-drop on:drag-start on:section-changed/>
+<div class="entries-future"  ondragover="return false">
+    {#each entries as entry (entry.id)}
+        <Entry on:remove-entry={handleRemoveEntry}
+               on:drag-start={handleDragStart}
+               bind:content={entry.text} bind:date={entry.date}
+               bind:time={entry.time} id={entry.id}
+               on:date-change={handleDateChange}
+               on:time-change={handleGeneralChange}
+               on:text-change={handleGeneralChange}
+               />
+    {/each}
 </div>

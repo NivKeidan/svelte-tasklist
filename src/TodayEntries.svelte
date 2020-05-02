@@ -1,19 +1,44 @@
 <script>
-    import {setContext} from 'svelte';
-    import {CONTEXT_CONFIG, SECTIONS, defaultConfig} from './constants';
-    import Section from './Section.svelte';
-    let config = Object.assign({}, defaultConfig);
-    config.showDate = false;
-    setContext(CONTEXT_CONFIG, config);
+    import {createEventDispatcher} from 'svelte';
+    import Entry from './Entry.svelte';
+    import {SECTIONS} from './constants';
+
+    const dispatch = createEventDispatcher();
 
     export let entries = [];
+    let dragCounter = 0;
 
+    function handleRemoveEntry(event) {
+        entries = entries.filter(e => e.id !== event.detail.id);
+        dispatch("entry-removed");
+    }
+
+    function handleDragStart(e) {
+        dispatch('drag-start', {section: SECTIONS.DAILY, entryId: e.detail.entryId})
+    }
+
+    function handleDateChange(e) {
+        dispatch('date-change', {section: SECTIONS.DAILY, entryId: e.detail.entryId});
+    }
+
+    function handleGeneralChange(e) {
+        dispatch('section-change', {section: SECTIONS.DAILY});
+    }
 
 </script>
 
 <style>
 </style>
 
-<div class="entries-today">
-    <Section name={SECTIONS.DAILY} bind:entries on:date-change on:drag-drop on:drag-start on:section-changed/>
+<div class="entries-today"  ondragover="return false" >
+    {#each entries as entry (entry.id)}
+        <Entry on:remove-entry={handleRemoveEntry}
+               on:drag-start={handleDragStart}
+               bind:content={entry.text} bind:date={entry.date}
+               bind:time={entry.time} id={entry.id}
+               on:date-change={handleDateChange}
+               on:time-change={handleGeneralChange}
+               on:text-change={handleGeneralChange}
+               showDate={false}/>
+    {/each}
 </div>
