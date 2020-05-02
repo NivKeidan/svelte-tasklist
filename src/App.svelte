@@ -213,32 +213,26 @@
 	<EntryInput on:new-entry={handleNewEntry}/>
 
 	<Section name={SECTIONS.DAILY} on:drag-drop={handleDragDrop}>
-		<span slot="entries">
-			<TodayEntries bind:entries={dailyEntries}
-						   on:section-change={handleSectionChanged}
-						   on:date-change={handleDateChange}
-						   on:drag-start={handleDragStart}
-			/>
-		</span>
+		<TodayEntries bind:entries={dailyEntries}
+					   on:section-change={handleSectionChanged}
+					   on:date-change={handleDateChange}
+					   on:drag-start={handleDragStart}
+		/>
 	</Section>
 
 	<Section name={SECTIONS.UPCOMING} on:drag-drop={handleDragDrop}>
-		<span slot="entries">
-			<UpcomingEntries bind:entries={weeklyEntries}
-						   on:section-change={handleSectionChanged}
-						   on:date-change={handleDateChange}
-						   on:drag-start={handleDragStart}
-			/>
-		</span>
+		<UpcomingEntries bind:entries={weeklyEntries}
+					   on:section-change={handleSectionChanged}
+					   on:date-change={handleDateChange}
+					   on:drag-start={handleDragStart}
+		/>
 	</Section>
 
 	<Section name={SECTIONS.FUTURE} on:drag-drop={handleDragDrop}>
-		<span slot="entries">
-			<FutureEntries bind:entries={futureEntries}
-							  on:section-change={handleSectionChanged}
-							  on:date-change={handleDateChange}
-							  on:drag-start={handleDragStart}
-			/>
-		</span>
+		<FutureEntries bind:entries={futureEntries}
+						  on:section-change={handleSectionChanged}
+						  on:date-change={handleDateChange}
+						  on:drag-start={handleDragStart}
+		/>
 	</Section>
 </div>

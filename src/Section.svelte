@@ -40,5 +40,5 @@
      on:dragleave={handleDragLeave}
      on:drop|preventDefault={handleDragDrop}>
     <div class="section-header"><u><b>{name} Tasks:</b></u></div>
-        <slot name="entries"/>
+        <slot/>
 </div>
