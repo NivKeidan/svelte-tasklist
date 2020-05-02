@@ -1,6 +1,6 @@
 <script>
 	import {onMount} from 'svelte';
-	import {getDaysFromToday, getSection} from './utils/time';
+	import {getDaysFromToday, getLastUpcomingDateString} from './utils/time';
 	import { SECTIONS } from './constants';
 
 	import TodayEntries from './TodayEntries.svelte';
@@ -34,11 +34,11 @@
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify(allEntries),
 		}).
-		then(data => console.log("save success", data)).
+		then(data => console.log("saved success")).
 		catch(err => console.log("save failed", err));
 	}
 
-	// ---------- Utils, sort of -------------
+	// ---------- Utils -------------
 
 	function getEntriesObject(section) {
 		switch (section) {
@@ -93,7 +93,12 @@
 	}
 
 	function insertNewEntry(entry, saveChanges=true) {
-		insertEntry(getSection(entry.date), entry, saveChanges);
+		let section = SECTIONS.FUTURE;
+		if (entry.date <= getTodayDateString())
+			section = SECTIONS.DAILY;
+		if (entry.date <= getLastUpcomingDateString())
+			section = SECTIONS.UPCOMING;
+		insertEntry(section, entry, saveChanges);
 	}
 
 	function getAllEntries() {

@@ -3,6 +3,7 @@ decide on final sections and implement them
 make dragging better - be able to drag to between elements, or be more specific, make design better.. i dunno
 consider adding animations - for fun or practice
 consider online/offline usage
+add saved (or online/offline) indication
 find server to use
 convert/maintain android app
 consider switching to save API to be only new change

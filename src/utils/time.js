@@ -11,14 +11,6 @@ export function getDefaultTime() {
     return "0123";
 }
 
-export function getSection(dateString) {
-    if (dateString <= getTodayDateString())
-        return SECTIONS.DAILY;
-    if (dateString <= getLastUpcomingDateString())
-        return SECTIONS.UPCOMING;
-    return SECTIONS.FUTURE;
-}
-
 export function getDaysFromToday(n) {
     let d = new Date();
     d.setDate(d.getDate() + n);
@@ -63,7 +55,7 @@ function dateToString(d) {
     return year+(month < 10 ? "0"+month : month)+(day < 10 ? "0"+day : day);
 }
 
-function getLastUpcomingDateString() {
+export function getLastUpcomingDateString() {
     let d = new Date();
     d.setDate(d.getDate() + 7);
     return dateToString(d);
