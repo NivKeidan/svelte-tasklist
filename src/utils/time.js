@@ -34,11 +34,6 @@ export function analyzeTimeString(timeString) {
         return timeString;
     return getDefaultTime;
 }
-//
-// function getTodayDateString() {
-//     const today = new Date();
-//     return dateToString(today);
-// }
 
 function dateToString(d) {
     const year = d.getFullYear();
@@ -59,14 +54,21 @@ export function getDayName(dateString) {
     return days[d.getDay()];
 }
 
+export function breakApart(dateString) {
+    let returnObj = {};
+    returnObj.year = dateString.substring(0, 4);
+    returnObj.month = dateString.substring(4,6);
+    returnObj.day = dateString.substring(6);
+
+    return returnObj;
+}
+
 function stringToDate(dateString) {
-    const yearPart = parseInt(dateString.substring(0, 4));
-    const monthPart = parseInt(dateString.substring(4,6));
-    const dayPart = parseInt(dateString.substring(6));
+    const dateParts = breakApart(dateString);
 
     let d = new Date();
-    d.setFullYear(yearPart);
-    d.setMonth(monthPart-1);
-    d.setDate(dayPart);
+    d.setFullYear(dateParts.year);
+    d.setMonth(dateParts.month-1);
+    d.setDate(dateParts.day);
     return d;
 }

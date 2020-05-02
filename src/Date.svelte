@@ -1,7 +1,7 @@
 <script>
     import {inputAdded} from './utils/forms';
     import { createEventDispatcher } from 'svelte';
-    import { getDayName } from './utils/time';
+    import { getDayName, breakApart } from './utils/time';
 
     export let data = "";
     export let useDayName = false;
@@ -61,9 +61,18 @@
         }
 
         return true;
-
-
     }
+
+    function getDisplayDate() {
+        let dateParts = breakApart(data);
+        let currentYear =  new Date().getFullYear();
+        let finalString =  dateParts.day + "." + dateParts.month;
+        if (parseInt(dateParts.year) !== currentYear) {
+            finalString = finalString + "." + dateParts.year.substring(2);
+        }
+        return finalString;
+    }
+
 </script>
 
 <style>
@@ -90,7 +99,7 @@
         {#if useDayName}
             {getDayName(data)}
         {:else}
-            {data}
+            {getDisplayDate()}
         {/if}
     </span>
 {/if}

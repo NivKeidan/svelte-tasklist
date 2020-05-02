@@ -1,9 +1,5 @@
-add boolean to show time or not.
-if time is deleted, set to false.
-if new input has no time, set to 0 and dont show.
-
-change future date show - remove year if current, and show as DD.MM.YY
 add weekday text recognition
+add date text recognition
 make design better
 make dragging better
 
