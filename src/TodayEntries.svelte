@@ -10,7 +10,7 @@
 
     function handleRemoveEntry(event) {
         entries = entries.filter(e => e.id !== event.detail.id);
-        dispatch("entry-removed");
+        dispatch("section-change", {section: SECTIONS.DAILY});
     }
 
     function handleDragStart(e) {
@@ -39,6 +39,6 @@
                on:date-change={handleDateChange}
                on:time-change={handleGeneralChange}
                on:text-change={handleGeneralChange}
-               showDate={false}/>
+               showDate={false} oneLiner={true}/>
     {/each}
 </div>

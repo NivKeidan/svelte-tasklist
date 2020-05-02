@@ -1,7 +1,10 @@
-make same day use same line in weelky and future
+weelky should display EVERY day, and not just ones with entries for them
+add ability to hide time if it is not set (not the same as 0000)
+add weekday text recognition
 make design better
+make dragging better -
+
 decide on final sections and implement them
-make dragging better - be able to drag to between elements, or be more specific, make design better.. i dunno
 consider adding animations - for fun or practice
 consider online/offline usage
 add saved (or online/offline) indication

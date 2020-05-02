@@ -12,6 +12,7 @@
     export let useDayNames = false;
     export let showDate = true;
     export let showTime = true;
+    export let oneLiner = false;
     let previous = "";
     let isEditing = false;
     let isDragged = false;
@@ -77,9 +78,13 @@
     .edit-entry-form {
         display: inline-block;
     }
+    
+    .oneLiner {
+        display: block;
+    }
 
 </style>
-<div class="entry" class:dragged="{isDragged}">
+<span class="entry" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
     <button on:click={handleRemove} >X</button>
     {#if showDate }
         <Date bind:data={date} on:date-change={handleDateChanged} useDayName={useDayNames}/>
@@ -97,4 +102,4 @@
               on:dragend={handleDragEnd}
               on:dragstart|stopPropagation={handleDragStart}>{content}</span>
     {/if}
-</div>
+</span>

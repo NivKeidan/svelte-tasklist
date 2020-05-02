@@ -4,12 +4,10 @@
     import { getDayName } from './utils/time';
 
     export let data = "";
-    export let useDayName;
+    export let useDayName = false;
     let inputValue = "";
     let isEditing = false;
     const dispatch = createEventDispatcher();
-
-    getDayName(data);
 
     function handleKeyDown(e) {
         if (e.key === 'Escape') {
