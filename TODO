@@ -1,9 +1,13 @@
-weelky should display EVERY day, and not just ones with entries for them
-add ability to hide time if it is not set (not the same as 0000)
+add boolean to show time or not.
+if time is deleted, set to false.
+if new input has no time, set to 0 and dont show.
+
+change future date show - remove year if current, and show as DD.MM.YY
 add weekday text recognition
 make design better
-make dragging better -
+make dragging better
 
+find better marking of no time shown
 decide on final sections and implement them
 consider adding animations - for fun or practice
 consider online/offline usage

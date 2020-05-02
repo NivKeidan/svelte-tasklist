@@ -3,11 +3,12 @@
     import Date from './Date.svelte';
     import Time from './Time.svelte';
     import {inputAdded} from './utils/forms';
+    import {getDefaultDate, getDefaultTime} from './utils/time';
 
     const dispatch = createEventDispatcher();
     export let content = "This entry has no content wtf?!?!";
-    export let date = "00000000";
-    export let time = "0000";
+    export let date = getDefaultDate();
+    export let time = getDefaultTime();
     export let id = 0;
     export let useDayNames = false;
     export let showDate = true;

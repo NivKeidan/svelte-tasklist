@@ -8,7 +8,7 @@ export function getDefaultDate() {
 }
 
 export function getDefaultTime() {
-    return "0123";
+    return "9999";
 }
 
 export function getDaysFromToday(n) {

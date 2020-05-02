@@ -5,6 +5,7 @@
 
     export let data = "";
     export let useDayName = false;
+    export let changeable = true;
     let inputValue = "";
     let isEditing = false;
     const dispatch = createEventDispatcher();
@@ -16,8 +17,10 @@
     }
 
     function handleClick(e) {
-        inputValue = data;
-        isEditing = true;
+        if (changeable) {
+            inputValue = data;
+            isEditing = true;
+        }
     }
 
     function cancelEdit() {

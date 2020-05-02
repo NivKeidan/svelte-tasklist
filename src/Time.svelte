@@ -1,5 +1,6 @@
 <script>
     import {inputAdded} from './utils/forms';
+    import {getDefaultTime} from './utils/time';
     import {createEventDispatcher} from 'svelte';
 
     export let data = "";
@@ -14,7 +15,10 @@
     }
 
     function handleClick(e) {
-        inputValue = data;
+        if (data === getDefaultTime())
+            inputValue = "0000";
+        else
+            inputValue = data;
         isEditing = true;
     }
 
@@ -23,15 +27,18 @@
     }
 
     function handleSubmit(e) {
-        if (data === inputValue) {
+        if (data === inputValue) {  // No change
             cancelEdit();
             return
         }
-        if (validateInput()) {
+        if (validateInput())
             data = inputValue;
-            isEditing = false;
-            dispatch("time-change", {});
-        }
+        else if (inputValue === "")
+            data = getDefaultTime();
+        else
+            return;
+        isEditing = false;
+        dispatch("time-change", {});
     }
 
     function validateInput() {
@@ -81,5 +88,9 @@
                on:blur={cancelEdit}/>
     </form>
 {:else}
-    <span class="time" on:click={handleClick}>{data}</span>
+    {#if data !== getDefaultTime() }
+        <span class="time" on:click={handleClick}>{data}</span>
+    {:else}
+        <span class="time" on:click={handleClick}>---</span>
+    {/if}
 {/if}
