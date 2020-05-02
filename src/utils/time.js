@@ -61,3 +61,20 @@ export function getLastUpcomingDateString() {
     return dateToString(d);
 }
 
+export function getDayName(dateString) {
+    let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    let d = stringToDate(dateString);
+    return days[d.getDay()];
+}
+
+function stringToDate(dateString) {
+    const yearPart = parseInt(dateString.substring(0, 4));
+    const monthPart = parseInt(dateString.substring(4,6));
+    const dayPart = parseInt(dateString.substring(6));
+
+    let d = new Date();
+    d.setFullYear(yearPart);
+    d.setMonth(monthPart-1);
+    d.setDate(dayPart);
+    return d;
+}

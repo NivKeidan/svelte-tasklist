@@ -94,10 +94,11 @@
 
 	function insertNewEntry(entry, saveChanges=true) {
 		let section = SECTIONS.FUTURE;
-		if (entry.date <= getTodayDateString())
-			section = SECTIONS.DAILY;
+
 		if (entry.date <= getLastUpcomingDateString())
 			section = SECTIONS.UPCOMING;
+		if (entry.date <= getDaysFromToday(0))
+			section = SECTIONS.DAILY;
 		insertEntry(section, entry, saveChanges);
 	}
 
@@ -200,6 +201,10 @@
 	:global(:root){
 		--date-color: #4545ff;
 		--time-color: orange;
+	}
+	.app {
+		margin-left: 15%;
+		margin-right: 15%;
 	}
 </style>
 

@@ -81,7 +81,7 @@
 <div class="entry" class:dragged="{isDragged}">
     <button on:click={handleRemove} >X</button>
     {#if sectionConfig.showDate }
-        <Date bind:data={date} on:date-change={handleDateChanged}/>
+        <Date bind:data={date} on:date-change={handleDateChanged} useDayName={sectionConfig.useDayName}/>
     {/if}
     {#if sectionConfig.showTime }
         <Time bind:data={time} on:time-change/>

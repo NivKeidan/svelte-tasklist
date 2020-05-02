@@ -1,11 +1,10 @@
 <script>
     import {setContext} from 'svelte';
-    import {CONTEXT_CONFIG, SECTIONS} from './constants';
+    import {CONTEXT_CONFIG, SECTIONS, defaultConfig} from './constants';
     import Section from './Section.svelte';
-    setContext(CONTEXT_CONFIG, {
-        showDate: false,
-        showTime: true,
-    });
+    let config = Object.assign({}, defaultConfig);
+    config.showDate = false;
+    setContext(CONTEXT_CONFIG, config);
 
     export let entries = [];
 

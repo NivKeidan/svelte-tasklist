@@ -1,11 +1,15 @@
 <script>
     import {inputAdded} from './utils/forms';
     import { createEventDispatcher } from 'svelte';
+    import { getDayName } from './utils/time';
 
     export let data = "";
+    export let useDayName;
     let inputValue = "";
     let isEditing = false;
     const dispatch = createEventDispatcher();
+
+    getDayName(data);
 
     function handleKeyDown(e) {
         if (e.key === 'Escape') {
@@ -81,5 +85,11 @@
             on:blur={cancelEdit}/>
     </form>
 {:else}
-    <span class="date" on:click={handleClick}>{data}</span>
+    <span class="date" on:click={handleClick}>
+        {#if useDayName}
+            {getDayName(data)}
+        {:else}
+            {data}
+        {/if}
+    </span>
 {/if}

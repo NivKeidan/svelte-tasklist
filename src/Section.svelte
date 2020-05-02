@@ -41,6 +41,7 @@
 <style>
     .entries {
         margin-left: 10%;
+        font-size: 25px;
     }
 
     .section-header {
