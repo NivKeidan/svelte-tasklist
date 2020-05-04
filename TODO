@@ -1,16 +1,15 @@
-fix issue with removing entries from futures...
 make design better
-make dragging better
-
+bring dragging to final usage (move inside sections, etc)
 find better marking of no time shown
 decide on final sections and implement them
 consider adding animations - for fun or practice
-consider online/offline usage
+integrate offline usage (cookies?)
 add saved (or online/offline) indication
 find server to use
 convert/maintain android app
 consider switching to save API to be only new change
 consider getting new IDs from the server? (or just max id, or something)
 add undo for actions
+replace all console.log errors to show them properly
 add vocal insertion of new entries
 clicking c opens calendar view (to see dates and stuff)

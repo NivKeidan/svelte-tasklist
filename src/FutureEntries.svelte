@@ -19,6 +19,7 @@
         });
         sortDatedEntries();
         datedEntries = datedEntries;
+        console.log(datedEntries);
     }
 
     function sortDatedEntries() {
@@ -52,10 +53,9 @@
 </style>
 
 <div class="entries-future"  ondragover="return false">
-    {#each Object.entries(datedEntries) as [date, entries], ind }
-        <div>
-            <Date bind:data={date} changeable={false}/>
-            {#each entries as entry (entry.id) }
+    {#each Object.keys(datedEntries) as date (date) }
+        <Date bind:data={date} changeable={false} useDiv={true}>
+            {#each datedEntries[date] as entry (entry.id) }
                 <Entry on:remove-entry={handleRemoveEntry}
                        on:drag-start={handleDragStart}
                        bind:content={entry.text} bind:date={entry.date}
@@ -64,6 +64,6 @@
                        on:text-change={handleGeneralChange}
                        showDate={false}/>
             {/each}
-        </div>
+        </Date>
     {/each}
 </div>

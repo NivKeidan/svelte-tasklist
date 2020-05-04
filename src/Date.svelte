@@ -6,6 +6,7 @@
     export let data = "";
     export let useDayName = false;
     export let changeable = true;
+    export let useDiv = false;
     let inputValue = "";
     let isEditing = false;
     const dispatch = createEventDispatcher();
@@ -95,11 +96,22 @@
             on:blur={cancelEdit}/>
     </form>
 {:else}
-    <span class="date" on:click={handleClick}>
-        {#if useDayName}
-            {getDayName(data)}
-        {:else}
-            {getDisplayDate()}
-        {/if}
-    </span>
+    {#if useDiv}
+        <div class="date" on:click={handleClick}>
+            {#if useDayName}
+                {getDayName(data)}
+            {:else}
+                {getDisplayDate()}
+            {/if}
+            <slot></slot>
+        </div>
+    {:else}
+        <span class="date" on:click={handleClick}>
+            {#if useDayName}
+                {getDayName(data)}
+            {:else}
+                {getDisplayDate()}
+            {/if}
+        </span>
+    {/if}
 {/if}
