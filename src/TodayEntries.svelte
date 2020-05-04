@@ -1,5 +1,6 @@
 <script>
     import {createEventDispatcher} from 'svelte';
+    import {getDaysFromToday} from './utils/time';
     import Entry from './Entry.svelte';
     import {SECTIONS} from './constants';
 
@@ -25,6 +26,10 @@
         dispatch('section-change', {section: SECTIONS.DAILY});
     }
 
+    function shouldShowDate(d) {
+        return d !== getDaysFromToday(0);
+    }
+
 </script>
 
 <style>
@@ -39,6 +44,6 @@
                on:date-change={handleDateChange}
                on:time-change={handleGeneralChange}
                on:text-change={handleGeneralChange}
-               showDate={false} oneLiner={true}/>
+               showDate={shouldShowDate(entry.date)} oneLiner={true}/>
     {/each}
 </div>

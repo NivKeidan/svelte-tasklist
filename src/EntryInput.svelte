@@ -16,6 +16,9 @@
     function handleSubmit() {
         if (text !== "") {
             let date = analyzeDateString(dateStrings[selectedDateIndex]);
+            if (date === "") { // error
+                return;
+            }
             let time = analyzeTimeString(timeStrings[selectedTimeIndex]);
 
             text = text.replace(dateStrings[selectedDateIndex], '');

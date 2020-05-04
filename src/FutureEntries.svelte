@@ -17,7 +17,14 @@
                 datedEntries[e.date] = [];
             datedEntries[e.date] = [...datedEntries[e.date], e];
         });
-        // TODO sort
+        sortDatedEntries();
+        datedEntries = datedEntries;
+    }
+
+    function sortDatedEntries() {
+        Object.keys(datedEntries).forEach( date => {
+            datedEntries[date].sort( (a,b) => { return a.time - b.time});
+        });
     }
 
     function handleRemoveEntry(event) {
@@ -29,11 +36,13 @@
         dispatch('drag-start', {section: SECTIONS.FUTURE, entryId: e.detail.entryId})
     }
 
-    function handleDateChange(e) {
-        dispatch('date-change', {section: SECTIONS.FUTURE, entryId: e.detail.entryId});
+    function handleGeneralChange(e) {
+        dispatch('section-change', {section: SECTIONS.FUTURE});
     }
 
-    function handleGeneralChange(e) {
+    function handleTimeChange(e) {
+        sortDatedEntries();
+        datedEntries = datedEntries;
         dispatch('section-change', {section: SECTIONS.FUTURE});
     }
 
@@ -45,14 +54,13 @@
 <div class="entries-future"  ondragover="return false">
     {#each Object.entries(datedEntries) as [date, entries], ind }
         <div>
-            <Date bind:data={date}/>
+            <Date bind:data={date} changeable={false}/>
             {#each entries as entry (entry.id) }
                 <Entry on:remove-entry={handleRemoveEntry}
                        on:drag-start={handleDragStart}
                        bind:content={entry.text} bind:date={entry.date}
                        bind:time={entry.time} id={entry.id}
-                       on:date-change={handleDateChange}
-                       on:time-change={handleGeneralChange}
+                       on:time-change={handleTimeChange}
                        on:text-change={handleGeneralChange}
                        showDate={false}/>
             {/each}
