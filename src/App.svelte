@@ -9,6 +9,7 @@
 	import FutureEntries from './FutureEntries.svelte';
 	import EntryInput from './EntryInput.svelte';
 	import Header from './Header.svelte';
+	import './App.css';
 
 	let dailyEntries = [];
 	let weeklyEntries = [];
@@ -196,17 +197,6 @@
 	}
 
 </script>
-
-<style>
-	:global(:root){
-		--date-color: #4545ff;
-		--time-color: orange;
-	}
-	.app {
-		margin-left: 15%;
-		margin-right: 15%;
-	}
-</style>
 
 <div class="app">
 	<Header/>

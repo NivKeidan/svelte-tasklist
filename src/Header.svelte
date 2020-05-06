@@ -1,12 +1,6 @@
 <script>
+    import './Header.css';
 </script>
-
-<style>
-    .app-header {}
-    .headline {
-        text-align: center;
-    }
-</style>
 
 <div class="app-header">
     <p class="headline">

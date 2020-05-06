@@ -2,6 +2,7 @@
     import {inputAdded} from './utils/forms';
     import { createEventDispatcher } from 'svelte';
     import { getDayName, breakApart } from './utils/time';
+    import './Date.css';
 
     export let data = "";
     export let useDayName = false;
@@ -75,20 +76,6 @@
     }
 
 </script>
-
-<style>
-    .date {
-        color: var(--date-color);
-    }
-
-    .edit-date-form {
-        display: inline-block;
-    }
-
-    .edit-date-input {
-        max-width: 10ch;
-    }
-</style>
 
 {#if isEditing}
     <form on:submit|preventDefault={handleSubmit} class="edit-date-form">

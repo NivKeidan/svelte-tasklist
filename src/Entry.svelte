@@ -5,6 +5,8 @@
     import {inputAdded} from './utils/forms';
     import {getDaysFromToday} from './utils/time';
     import {NullTime} from './constants';
+    import Button from '@smui/button';
+    import './Entry.css';
 
     const dispatch = createEventDispatcher();
     export let content = "This entry has no content wtf?!?!";
@@ -66,27 +68,8 @@
 
 </script>
 
-<style>
-
-    .entry {
-        margin-bottom: 2%;
-    }
-
-    .dragged {
-        color: red;
-    }
-
-    .edit-entry-form {
-        display: inline-block;
-    }
-    
-    .oneLiner {
-        display: block;
-    }
-
-</style>
 <span class="entry" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
-    <button on:click={handleRemove} >X</button>
+    <Button on:click={handleRemove} >X</Button>
     {#if showDate }
         <Date bind:data={date} on:date-change={handleDateChanged} useDayName={useDayNames}/>
     {/if}

@@ -1,0 +1,11 @@
+.time {
+    color: var(--time-color);
+}
+
+.edit-time-form {
+    display: inline-block;
+}
+
+.edit-time-input {
+    max-width: 6ch;
+}

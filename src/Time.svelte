@@ -2,6 +2,7 @@
     import {inputAdded} from './utils/forms';
     import {NullTime} from './constants';
     import {createEventDispatcher, onMount} from 'svelte';
+    import './Time.css';
 
     export let data = "";
     export let show = true;
@@ -74,20 +75,6 @@
 
     }
 </script>
-
-<style>
-    .time {
-        color: var(--time-color);
-    }
-
-    .edit-time-form {
-        display: inline-block;
-    }
-
-    .edit-time-input {
-        max-width: 6ch;
-    }
-</style>
 
 {#if isEditing}
     <form on:submit|preventDefault={handleSubmit} class="edit-time-form">

@@ -1,6 +1,8 @@
 <script>
     import { createEventDispatcher, afterUpdate } from 'svelte';
     import { analyzeDateString, analyzeTimeString, DATE_REGEX, TIME_REGEX } from './utils/time';
+    import './EntryInput.css';
+
     const dispatch = createEventDispatcher();
     let text = "";
     let dateStrings = [];
@@ -56,65 +58,6 @@
     }
 
 </script>
-
-<style>
-    .input {
-        text-align: center;
-        margin-top: 2%;
-        margin-bottom: 3%;
-    }
-
-    .entry-input {
-        border: 1px solid darkgray;
-        box-shadow: 1px 1px 1px 0 lightgray inset;
-        width: 50%;
-        left: 22%;
-        display: inline-block;
-        height: 6vh;
-        font-size: 5vh;
-    }
-
-    .btn-add {
-        margin-left: 1%;
-        vertical-align: middle;
-        width: 6%;
-    }
-
-    .input-date {
-        background-color: var(--date-color);
-        font-weight: bold;
-        font-size: large;
-        padding: 3px;
-        margin: 1px;
-    }
-
-    .input-time {
-        font-weight: bold;
-        background-color: var(--time-color);
-        font-size: large;
-        padding: 3px;
-        margin: 1px;
-    }
-
-    .inputs-found span:empty
-    {
-        display:none;
-    }
-
-
-    .inputs-found {
-        display: inline-block;
-    }
-
-    .time-selected {
-        border: var(--date-color) 3px solid;
-    }
-
-    .date-selected {
-        border: var(--time-color) 3px solid;
-    }
-
-</style>
 
 <div class="input" on:keydown={handleKeyDown}>
     <span class="inputs-found">

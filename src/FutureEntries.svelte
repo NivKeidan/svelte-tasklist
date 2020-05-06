@@ -19,7 +19,6 @@
         });
         sortDatedEntries();
         datedEntries = datedEntries;
-        console.log(datedEntries);
     }
 
     function sortDatedEntries() {

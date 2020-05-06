@@ -1,0 +1,11 @@
+.date {
+    color: var(--date-color);
+}
+
+.edit-date-form {
+    display: inline-block;
+}
+
+.edit-date-input {
+    max-width: 10ch;
+}

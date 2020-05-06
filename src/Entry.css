@@ -1,0 +1,15 @@
+.entry {
+    margin-bottom: 2%;
+}
+
+.dragged {
+    color: red;
+}
+
+.edit-entry-form {
+    display: inline-block;
+}
+
+.oneLiner {
+    display: block;
+}
