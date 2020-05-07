@@ -4,6 +4,7 @@
     import Date from './Date.svelte';
     import EntrySeparator from './EntrySeparator.svelte';
     import { SECTIONS, SHOW_DATE } from './utils/constants';
+    import { getDaysFromToday } from './utils/time';
 
     const dispatch = createEventDispatcher();
 
@@ -63,9 +64,17 @@
     .date-grid-child-rest {
         grid-column: 3;
     }
+    .date-grid-child-all {
+        grid-column: 1 / span 3;
+    }
 </style>
 
 <div class="entries-future"  ondragover="return false">
+    {#if Object.keys(datedEntries).length === 0}
+        <span class="date-grid-child-all">
+            <EntrySeparator date={getDaysFromToday(8)} preSeparatorEntryTime="-1" on:drag-drop fillSpace={true}/>
+        </span>
+    {/if}
     {#each Object.keys(datedEntries) as date (date) }
         <span class="date-grid-child-first">
             <Date bind:data={date} changeable={false}/>

@@ -65,6 +65,9 @@
         display: grid;
         grid-template-columns: 6% 4% auto;
     }
+    .no-entries {
+        grid-template-columns: 6% auto auto;
+    }
     .date-grid-child-first {
         grid-column: 1;
     }
@@ -78,7 +81,7 @@
 
 <div class="entries-upcoming">
     {#each Object.entries(datedEntries) as [date, entries], ind }
-        <div class="upcoming-row">
+        <div class="upcoming-row {entries.length === 0 ? 'no-entries' : ''}">
             <span class="date-grid-child-first">
                 <Date bind:data={date} changeable={false} show={SHOW_DATE.DAY}/>
             </span>
