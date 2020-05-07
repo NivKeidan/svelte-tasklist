@@ -1,9 +1,11 @@
 <script>
+    import Fa from 'svelte-fa'
+    import { faCalendar } from '@fortawesome/free-regular-svg-icons'
     export let opposite = false;
 </script>
 
 {#if opposite}
-    <span class="time far fa-calendar-alt"></span>
+    <Fa class="time" icon={faCalendar}/>
 {:else}
-    <span class="date far fa-calendar-alt"></span>
+    <Fa class="date" icon={faCalendar}/>
 {/if}

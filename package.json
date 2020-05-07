@@ -16,9 +16,11 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "@fortawesome/free-regular-svg-icons": "^5.13.0",
     "bulma": "^0.8.2",
     "rollup-plugin-postcss": "^3.1.1",
     "sass": "^1.26.5",
-    "sirv-cli": "^0.4.4"
+    "sirv-cli": "^0.4.4",
+    "svelte-fa": "^2.1.1"
   }
 }
