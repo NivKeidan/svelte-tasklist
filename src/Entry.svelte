@@ -5,7 +5,6 @@
     import {inputAdded} from './utils/forms';
     import {getDaysFromToday} from './utils/time';
     import {NullTime} from './constants';
-    import Button from '@smui/button';
     import './Entry.css';
 
     const dispatch = createEventDispatcher();
@@ -69,7 +68,7 @@
 </script>
 
 <span class="entry" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
-    <Button on:click={handleRemove} >X</Button>
+    <button on:click={handleRemove} >X</button>
     <Date bind:data={date} show={showDate} on:date-change={handleDateChanged} useDayName={useDayNames}/>
     <Time bind:data={time} on:time-change/>
     {#if isEditing}

@@ -61,16 +61,16 @@
 
 </script>
 
-<div class="input" on:keydown={handleKeyDown}>
+<div class="input-div" on:keydown={handleKeyDown}>
     <span class="inputs-found">
         {#each dateStrings as ds, i}
-            <span class="input-date" class:date-selected="{i == selectedDateIndex}" on:click="{e => selectedDateIndex = i}">{ds}</span>
+            <span class="input-date" class:date-selected="{i === selectedDateIndex}" on:click="{e => selectedDateIndex = i}">{ds}</span>
         {/each}
 
         {#each timeStrings as ts, i}
-            <span class="input-time" class:time-selected="{i == selectedTimeIndex}" on:click="{e => selectedTimeIndex = i}">{ts}</span>
+            <span class="input-time" class:time-selected="{i === selectedTimeIndex}" on:click="{e => selectedTimeIndex = i}">{ts}</span>
         {/each}
     </span>
-    <input bind:value={text} class="entry-input"/>
+    <input bind:value={text} class="entry-input" />
     <button class="btn-add" on:click={handleSubmit}>Add</button>
 </div>

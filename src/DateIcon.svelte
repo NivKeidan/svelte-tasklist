@@ -1,8 +1,9 @@
 <script>
     export let opposite = false;
 </script>
+
 {#if opposite}
-    <span class="time material-icons">event</span>
+    <span class="time far fa-calendar-alt"></span>
 {:else}
-    <span class="date material-icons">event</span>
+    <span class="date far fa-calendar-alt"></span>
 {/if}

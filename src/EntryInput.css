@@ -1,4 +1,4 @@
-.input {
+.input-div {
     text-align: center;
     margin-top: 2%;
     margin-bottom: 3%;
@@ -10,6 +10,7 @@
     width: 50%;
     left: 22%;
     display: inline-block;
+    vertical-align: middle;
     height: 6vh;
     font-size: 5vh;
 }

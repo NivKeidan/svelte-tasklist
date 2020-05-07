@@ -1,4 +1,6 @@
 <script>
+	import 'bulma/css/bulma.css';
+
 	import {onMount} from 'svelte';
 	import {getDaysFromToday, getLastUpcomingDateString} from './utils/time';
 	import { SECTIONS } from './constants';
@@ -9,6 +11,7 @@
 	import FutureEntries from './FutureEntries.svelte';
 	import EntryInput from './EntryInput.svelte';
 	import Header from './Header.svelte';
+
 	import './App.css';
 
 	let dailyEntries = [];
@@ -197,7 +200,7 @@
 	}
 
 </script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
 <div class="app">
 	<Header/>
 	<EntryInput on:new-entry={handleNewEntry}/>

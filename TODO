@@ -1,5 +1,3 @@
-convert input to material UI
-add a calendar icon if date is hidden but editable
 remove headers of sections
 create separators between sections
 inside weekly, give each row a space
