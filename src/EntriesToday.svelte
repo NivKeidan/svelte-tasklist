@@ -1,7 +1,9 @@
 <script>
     import {createEventDispatcher} from 'svelte';
     import Entry from './Entry.svelte';
+    import EntrySeparator from './EntrySeparator.svelte';
     import {SECTIONS, SHOW_DATE} from './utils/constants';
+    import {getDaysFromToday} from './utils/time';
 
     const dispatch = createEventDispatcher();
 
@@ -31,6 +33,7 @@
 </style>
 
 <div ondragover="return false">
+    <EntrySeparator date={getDaysFromToday(0)} preSeparatorEntryTime="-1" on:drag-drop fullLine={true}/>
     {#each entries as entry (entry.id)}
         <Entry on:remove-entry={handleRemoveEntry}
                on:drag-start={handleDragStart}
@@ -40,5 +43,7 @@
                on:time-change={handleGeneralChange}
                on:text-change={handleGeneralChange}
                showDate={SHOW_DATE.NONE} oneLiner={true}/>
+        <EntrySeparator date={getDaysFromToday(0)} preSeparatorEntryTime={entry.time} on:drag-drop fullLine={true}/>
+
     {/each}
 </div>

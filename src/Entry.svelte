@@ -83,5 +83,7 @@
                   on:dragstart|stopPropagation={handleDragStart}>{content}</span>
         {/if}
     </span>
-   <Fa class="icon-remove-entry" icon={faTrashAlt}/>
+   <span on:click={handleRemove}>
+       <Fa class="icon-remove-entry" icon={faTrashAlt} />
+   </span>
 </span>

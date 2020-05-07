@@ -2,11 +2,10 @@
 	import 'bulma/css/bulma.css';
 
 	import {onMount} from 'svelte';
-	import {getDaysFromToday, getLastUpcomingDateString} from './utils/time';
+	import {getDaysFromToday, getLastUpcomingDateString, intToTimeString} from './utils/time';
 	import { SECTIONS } from './utils/constants';
 
 	import TodayEntries from './EntriesToday.svelte';
-	import Section from './Section.svelte';
 	import UpcomingEntries from './EntriesUpcoming.svelte';
 	import FutureEntries from './EntriesFuture.svelte';
 	import EntryInput from './EntryInput.svelte';
@@ -176,23 +175,11 @@
 	}
 
 	function handleDragDrop(e) {
-		const targetSection = e.detail.section;
-		if (dragOrigin !== targetSection) {
-			let entry = getEntryById(dragOrigin, draggedEntryId);
-			removeEntryById(dragOrigin, draggedEntryId, false);
-			switch (targetSection) {
-				case SECTIONS.DAILY:
-					entry.date = getDaysFromToday(0);
-					break;
-				case SECTIONS.UPCOMING:
-					entry.date = getDaysFromToday(5);
-					break;
-				case SECTIONS.FUTURE:
-					entry.date = getDaysFromToday(30);
-					break;
-			}
-			insertNewEntry(entry);
-		}
+		let entry = getEntryById(dragOrigin, draggedEntryId);
+		removeEntryById(dragOrigin, draggedEntryId, false);
+		entry.date = e.detail.targetDate;
+		entry.time = intToTimeString(e.detail.targetTime);
+		insertNewEntry(entry);
 	}
 
 	function handleDragStart(e) {
@@ -205,31 +192,28 @@
 	<Header/>
 	<EntryInput on:new-entry={handleNewEntry}/>
 
-	<Section name={SECTIONS.DAILY} on:drag-drop={handleDragDrop}>
-		<TodayEntries bind:entries={dailyEntries}
-					   on:section-change={handleSectionChanged}
-					   on:date-change={handleDateChange}
-					   on:drag-start={handleDragStart}
-		/>
-	</Section>
+	<TodayEntries bind:entries={dailyEntries}
+				   on:section-change={handleSectionChanged}
+				   on:date-change={handleDateChange}
+				   on:drag-start={handleDragStart}
+				  on:drag-drop={handleDragDrop}
+	/>
 
 	<SectionSeaprator/>
 
-	<Section name={SECTIONS.UPCOMING} on:drag-drop={handleDragDrop}>
-		<UpcomingEntries bind:entries={weeklyEntries}
-					   on:section-change={handleSectionChanged}
-					   on:date-change={handleDateChange}
-					   on:drag-start={handleDragStart}
-		/>
-	</Section>
+	<UpcomingEntries bind:entries={weeklyEntries}
+				   on:section-change={handleSectionChanged}
+				   on:date-change={handleDateChange}
+				   on:drag-start={handleDragStart}
+				   on:drag-drop={handleDragDrop}
+	/>
 
 	<SectionSeaprator/>
 
-	<Section name={SECTIONS.FUTURE} on:drag-drop={handleDragDrop}>
-		<FutureEntries bind:entries={futureEntries}
-						  on:section-change={handleSectionChanged}
-						  on:date-change={handleDateChange}
-						  on:drag-start={handleDragStart}
-		/>
-	</Section>
+	<FutureEntries bind:entries={futureEntries}
+					  on:section-change={handleSectionChanged}
+					  on:date-change={handleDateChange}
+					  on:drag-start={handleDragStart}
+					  on:drag-drop={handleDragDrop}
+	/>
 </div>

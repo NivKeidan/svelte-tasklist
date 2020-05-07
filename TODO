@@ -1,6 +1,8 @@
-bring dragging to final usage (move inside sections, etc)
-decide on final sections and implement them
+make green border be nicer visually for dragging
+handle sorting between null time, or same time, etc
+add able to drag to empty today section, and empty future section
 
+decide on final sections and implement them
 STOP HERE AND CONSIDER WHATS NEXT
 
 consider adding animations - for fun or practice

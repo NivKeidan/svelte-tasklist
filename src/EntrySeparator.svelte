@@ -1,8 +1,57 @@
+<script>
+    export let date;
+    export let preSeparatorEntryTime;
+    export let fullLine = false;
+    export let fillSpace = false;
+    import {NullTime} from './utils/constants';
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
+    let dragCounter = 0;
+
+    function handleDragEnter(e) {
+        dragCounter++;
+    }
+
+    function handleDragLeave(e) {
+        dragCounter--;
+    }
+
+    function getTargetTime() {
+        if (preSeparatorEntryTime === NullTime)
+            return NullTime;
+        return parseInt(preSeparatorEntryTime)+1;
+    }
+
+    function handleDragDrop(e) {
+        dragCounter = 0;
+        dispatch('drag-drop', {targetDate: date, targetTime: getTargetTime()});
+    }
+</script>
+
 <style>
-    .entry-separator {
-        border-right: 3px solid #bbb;
-        margin-right: 2%;
-        margin-left: 2%;
+    .in-line {
+        padding-left: 1%;
+        padding-right: 1%;
+    }
+    .fill-space {
+        padding-right: 40%;
+        padding-left: 50%;
+    }
+    .dragged-on {
+        border: green solid 3px;
+    }
+    .full-line {
+        padding-top: 0.5%;
+        padding-bottom: 0.5%;
+        display: block;
+        width: 15%;
     }
 </style>
-<span class="entry-separator"/>
+
+<span on:dragenter={handleDragEnter}
+      on:dragleave={handleDragLeave}
+      on:dragover|preventDefault
+      on:drop|preventDefault={handleDragDrop}
+      class:dragged-on="{dragCounter > 0}"
+      class="{ fullLine ? 'full-line' : fillSpace ? 'fill-space' : 'in-line'}" />

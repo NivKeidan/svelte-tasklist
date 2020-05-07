@@ -100,6 +100,16 @@ export function breakApart(dateString) {
     return returnObj;
 }
 
+export function intToTimeString(n) {
+    if (n < 10)
+        return "000" + n;
+    else if (n < 100)
+        return "00"+n;
+    else if (n < 1000)
+        return "0" + n;
+    return n;
+}
+
 function getYearsFromToday(n) {
     let d = new Date();
     d.setFullYear(d.getFullYear() + n);

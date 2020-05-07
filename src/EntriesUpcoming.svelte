@@ -63,7 +63,7 @@
 <style>
     .upcoming-row {
         display: grid;
-        grid-template-columns: 8% auto;
+        grid-template-columns: 6% 4% auto;
     }
     .date-grid-child-first {
         grid-column: 1;
@@ -71,15 +71,21 @@
     .date-grid-child-second {
         grid-column: 2;
     }
+    .date-grid-child-rest {
+        grid-column: 3;
+    }
 </style>
 
-<div class="entries-upcoming"  ondragover="return false">
+<div class="entries-upcoming">
     {#each Object.entries(datedEntries) as [date, entries], ind }
         <div class="upcoming-row">
             <span class="date-grid-child-first">
                 <Date bind:data={date} changeable={false} show={SHOW_DATE.DAY}/>
             </span>
             <span class="date-grid-child-second">
+                <EntrySeparator date={date} preSeparatorEntryTime="-1" on:drag-drop fillSpace={true}/>
+            </span>
+            <span class="date-grid-child-rest">
                 {#each entries as entry (entry.id) }
                     <Entry on:remove-entry={handleRemoveEntry}
                            on:drag-start={handleDragStart}
@@ -89,7 +95,7 @@
                            on:time-change={handleTimeChange}
                            on:text-change={handleGeneralChange}
                            showDate={SHOW_DATE.NONE}/>
-                    <EntrySeparator />
+                    <EntrySeparator date={date} preSeparatorEntryTime={entry.time} on:drag-drop/>
                 {/each}
             </span>
         </div>

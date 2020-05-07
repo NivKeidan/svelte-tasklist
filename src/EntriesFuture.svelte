@@ -52,13 +52,16 @@
 <style>
     .entries-future {
         display: grid;
-        grid-template-columns: 7% auto;
+        grid-template-columns: 5% 4% auto;
     }
     .date-grid-child-first {
         grid-column: 1;
     }
     .date-grid-child-second {
         grid-column: 2;
+    }
+    .date-grid-child-rest {
+        grid-column: 3;
     }
 </style>
 
@@ -68,6 +71,9 @@
             <Date bind:data={date} changeable={false}/>
         </span>
         <span class="date-grid-child-second">
+            <EntrySeparator date={date} preSeparatorEntryTime="-1" on:drag-drop fillSpace={true}/>
+        </span>
+        <span class="date-grid-child-rest">
             {#each datedEntries[date] as entry (entry.id) }
                 <Entry on:remove-entry={handleRemoveEntry}
                        on:drag-start={handleDragStart}
@@ -76,7 +82,7 @@
                        on:time-change={handleTimeChange}
                        on:text-change={handleGeneralChange}
                        showDate={SHOW_DATE.ICON}/>
-                <EntrySeparator />
+                <EntrySeparator date={date} preSeparatorEntryTime={entry.time} on:drag-drop/>
             {/each}
         </span>
     {/each}
