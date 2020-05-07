@@ -7,6 +7,7 @@
 
     const dispatch = createEventDispatcher();
     let text = "";
+    let inputElement;
     let dateStrings = [];
     let timeStrings = [];
     let selectedTimeIndex = 0;
@@ -56,21 +57,31 @@
             handleSubmit();
             e.preventDefault();
         }
-
     }
+
+    function handleDateClick(i) {
+        selectedDateIndex = i;
+        inputElement.focus();
+    }
+
+    function handleTimeClick(i) {
+        selectedTimeIndex = i;
+        inputElement.focus();
+    }
+
 
 </script>
 
 <div class="input-div" on:keydown={handleKeyDown}>
     <span class="inputs-found">
         {#each dateStrings as ds, i}
-            <span class="input-date" class:date-selected="{i === selectedDateIndex}" on:click="{e => selectedDateIndex = i}">{ds}</span>
+            <span class="input-date" class:date-selected="{i === selectedDateIndex}" on:click="{e => handleDateClick(i)}">{ds}</span>
         {/each}
 
         {#each timeStrings as ts, i}
-            <span class="input-time" class:time-selected="{i === selectedTimeIndex}" on:click="{e => selectedTimeIndex = i}">{ts}</span>
+            <span class="input-time" class:time-selected="{i === selectedTimeIndex}" on:click="{e => handleTimeClick(i)}">{ts}</span>
         {/each}
     </span>
-    <input bind:value={text} class="entry-input" />
+    <input bind:value={text} class="entry-input" bind:this={inputElement}/>
     <button class="btn-add" on:click={handleSubmit}>Add</button>
 </div>
