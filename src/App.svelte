@@ -197,7 +197,7 @@
 	}
 
 </script>
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <div class="app">
 	<Header/>
 	<EntryInput on:new-entry={handleNewEntry}/>

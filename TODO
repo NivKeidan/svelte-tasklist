@@ -1,4 +1,15 @@
-improve design significantly
+convert input to material UI
+add a calendar icon if date is hidden but editable
+remove headers of sections
+create separators between sections
+inside weekly, give each row a space
+make the left margin smaller
+make the X button smaller and bolder
+maybe show x only when hovering?
+for every section, make everything be in "columns" - date under date, text under text, etc..
+
+try and come closer to design finalization
+enter key after picking date/time from options adds entry
 bring dragging to final usage (move inside sections, etc)
 find better marking of no time shown
 decide on final sections and implement them

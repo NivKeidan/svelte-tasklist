@@ -70,9 +70,7 @@
 
 <span class="entry" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
     <Button on:click={handleRemove} >X</Button>
-    {#if showDate }
-        <Date bind:data={date} on:date-change={handleDateChanged} useDayName={useDayNames}/>
-    {/if}
+    <Date bind:data={date} show={showDate} on:date-change={handleDateChanged} useDayName={useDayNames}/>
     <Time bind:data={time} on:time-change/>
     {#if isEditing}
         <form on:submit|preventDefault={handleSubmit} class="edit-entry-form">

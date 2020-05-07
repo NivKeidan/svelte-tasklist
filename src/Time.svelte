@@ -3,6 +3,7 @@
     import {NullTime} from './constants';
     import {createEventDispatcher, onMount} from 'svelte';
     import './Time.css';
+    import TimeIcon from './TimeIcon.svelte';
 
     export let data = "";
     export let show = true;
@@ -85,6 +86,6 @@
     {#if show }
         <span class="time" on:click={handleClick}>{data}</span>
     {:else}
-        <span class="time" on:click={handleClick}>---</span>
+        <span on:click={handleClick}><TimeIcon/></span>
     {/if}
 {/if}
