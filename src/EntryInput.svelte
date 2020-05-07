@@ -2,8 +2,8 @@
     import { createEventDispatcher, afterUpdate } from 'svelte';
     import { analyzeDateString, analyzeTimeString, DATE_REGEX, TIME_REGEX } from './utils/time';
     import './EntryInput.css';
-    import DateIcon from './DateIcon.svelte';
-    import TimeIcon from './TimeIcon.svelte';
+    import DateIcon from './IconDate.svelte';
+    import TimeIcon from './IconTime.svelte';
 
     const dispatch = createEventDispatcher();
     let text = "";

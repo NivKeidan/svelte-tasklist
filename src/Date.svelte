@@ -1,15 +1,14 @@
 <script>
     import {inputAdded} from './utils/forms';
+    import {SHOW_DATE} from './constants';
     import { createEventDispatcher } from 'svelte';
     import { getDayName, breakApart } from './utils/time';
     import './Date.css';
-    import DateIcon from './DateIcon.svelte';
+    import DateIcon from './IconDate.svelte';
 
     export let data = "";
-    export let useDayName = false;
     export let changeable = true;
-    export let useDiv = false;
-    export let show = true;
+    export let show = SHOW_DATE.FULL;
     let inputValue = "";
     let isEditing = false;
     const dispatch = createEventDispatcher();
@@ -85,26 +84,13 @@
             on:blur={cancelEdit}/>
     </form>
 {:else}
-    {#if show }
-        {#if useDiv }
-            <div class="date" on:click={handleClick}>
-                {#if useDayName}
-                    {getDayName(data)}
-                {:else}
-                    {getDisplayDate()}
-                {/if}
-                <slot></slot>
-            </div>
-        {:else}
-            <span class="date" on:click={handleClick}>
-                {#if useDayName}
-                    {getDayName(data)}
-                {:else}
-                    {getDisplayDate()}
-                {/if}
-            </span>
+    <span class="date" on:click={handleClick}>
+        {#if show === SHOW_DATE.FULL}
+            {getDisplayDate()}
+        {:else if show === SHOW_DATE.DAY}
+            {getDayName(data)}
+        {:else if show === SHOW_DATE.ICON}
+            <DateIcon/>
         {/if}
-    {:else}
-        <span on:click={handleClick}><DateIcon/></span>
-    {/if}
+    </span>
 {/if}

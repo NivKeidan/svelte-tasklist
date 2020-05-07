@@ -33,7 +33,7 @@ function getWeeksFromToday(n) {
 
 export function analyzeDateString(dateString) {
     if (dateString === null || dateString === undefined)
-        return getDefaultDate();
+        return getDaysFromToday(0);
 
     switch (dateString.toLowerCase()) {
         case 'today':

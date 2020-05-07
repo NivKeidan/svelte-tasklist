@@ -3,7 +3,7 @@
     import {NullTime} from './constants';
     import {createEventDispatcher, onMount} from 'svelte';
     import './Time.css';
-    import TimeIcon from './TimeIcon.svelte';
+    import TimeIcon from './IconTime.svelte';
 
     export let data = "";
     export let show = true;
@@ -70,10 +70,11 @@
             console.log("Time Input Error: Minutes not valid");
             return false;
         }
-
         return true;
+    }
 
-
+    function getDisplay() {
+        return data.slice(0, 2) + ":" + data.slice(2);
     }
 </script>
 
@@ -84,7 +85,7 @@
     </form>
 {:else}
     {#if show }
-        <span class="time" on:click={handleClick}>{data}</span>
+        <span class="time" on:click={handleClick}>{getDisplay()}</span>
     {:else}
         <span on:click={handleClick}><TimeIcon/></span>
     {/if}

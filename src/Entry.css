@@ -22,3 +22,8 @@
 .fa-trash-alt:hover {
     color: red;
 }
+
+.entry-text {
+    margin-left: 1%;
+    margin-right: 1%;
+}

@@ -1,8 +1,7 @@
 <script>
     import {createEventDispatcher} from 'svelte';
-    import {getDaysFromToday} from './utils/time';
     import Entry from './Entry.svelte';
-    import {SECTIONS} from './constants';
+    import {SECTIONS, SHOW_DATE} from './constants';
 
     const dispatch = createEventDispatcher();
 
@@ -26,16 +25,12 @@
         dispatch('section-change', {section: SECTIONS.DAILY});
     }
 
-    function shouldShowDate(d) {
-        return d !== getDaysFromToday(0);
-    }
-
 </script>
 
 <style>
 </style>
 
-<div class="entries-today"  ondragover="return false" >
+<div ondragover="return false">
     {#each entries as entry (entry.id)}
         <Entry on:remove-entry={handleRemoveEntry}
                on:drag-start={handleDragStart}
@@ -44,6 +39,6 @@
                on:date-change={handleDateChange}
                on:time-change={handleGeneralChange}
                on:text-change={handleGeneralChange}
-               showDate={shouldShowDate(entry.date)} oneLiner={true}/>
+               showDate={SHOW_DATE.NONE} oneLiner={true}/>
     {/each}
 </div>

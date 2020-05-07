@@ -1,4 +1,8 @@
-for every section, make everything be in "columns" - date under date, text under text, etc..
+rename xEntries to entriesX
+move constants to utils
+remove svelma
+
+COMMIT B4: use font-awesome as package and not css load (minimizes load time and removes ugly cookie)
 
 try and come closer to design finalization
 enter key after picking date/time from options adds entry

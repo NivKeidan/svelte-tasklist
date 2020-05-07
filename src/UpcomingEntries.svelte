@@ -3,7 +3,8 @@
     import {getDaysFromToday} from './utils/time';
     import Entry from './Entry.svelte';
     import Date from './Date.svelte';
-    import { SECTIONS } from './constants';
+    import EntrySeparator from './EntrySeparator.svelte';
+    import { SECTIONS, SHOW_DATE} from './constants';
 
     const dispatch = createEventDispatcher();
     const displayDaysNum = 7;
@@ -62,23 +63,36 @@
 <style>
     .upcoming-row {
         margin-bottom: 2%;
+        display: grid;
+        grid-template-columns: 8% auto;
+    }
+    .date-grid-child-first {
+        grid-column: 1;
+    }
+    .date-grid-child-second {
+        grid-column: 2;
     }
 </style>
 
 <div class="entries-upcoming"  ondragover="return false">
     {#each Object.entries(datedEntries) as [date, entries], ind }
         <div class="upcoming-row">
-            <Date useDayName={true} bind:data={date} changeable={false}/>
-            {#each entries as entry (entry.id) }
-                <Entry on:remove-entry={handleRemoveEntry}
-                       on:drag-start={handleDragStart}
-                       bind:content={entry.text} bind:date={entry.date}
-                       bind:time={entry.time} id={entry.id}
-                       on:date-change={handleDateChange}
-                       on:time-change={handleTimeChange}
-                       on:text-change={handleGeneralChange}
-                       showDate={false}/>
-            {/each}
+            <span class="date-grid-child-first">
+                <Date bind:data={date} changeable={false} show={SHOW_DATE.DAY}/>
+            </span>
+            <span class="date-grid-child-second">
+                {#each entries as entry (entry.id) }
+                    <Entry on:remove-entry={handleRemoveEntry}
+                           on:drag-start={handleDragStart}
+                           bind:content={entry.text} bind:date={entry.date}
+                           bind:time={entry.time} id={entry.id}
+                           on:date-change={handleDateChange}
+                           on:time-change={handleTimeChange}
+                           on:text-change={handleGeneralChange}
+                           showDate={SHOW_DATE.NONE}/>
+                    <EntrySeparator />
+                {/each}
+            </span>
         </div>
     {/each}
 </div>

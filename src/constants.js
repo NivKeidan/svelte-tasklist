@@ -4,4 +4,11 @@ export const SECTIONS = {
     FUTURE: "Future"
 };
 
+export const SHOW_DATE = {
+    NONE: "None",
+    ICON: "Icon",
+    DAY: "DayName",
+    FULL: "Full"
+}
+
 export const NullTime = "9999";

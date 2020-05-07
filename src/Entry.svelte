@@ -4,7 +4,7 @@
     import Time from './Time.svelte';
     import {inputAdded} from './utils/forms';
     import {getDaysFromToday} from './utils/time';
-    import {NullTime} from './constants';
+    import {NullTime, SHOW_DATE} from './constants';
     import './Entry.css';
 
     const dispatch = createEventDispatcher();
@@ -12,8 +12,7 @@
     export let date = getDaysFromToday(0);
     export let time = NullTime;
     export let id = 0;
-    export let useDayNames = false;
-    export let showDate = true;
+    export let showDate = SHOW_DATE.FULL;
     export let oneLiner = false;
     let previous = "";
     let isEditing = false;
@@ -68,17 +67,19 @@
 </script>
 
 <span class="entry" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
-    <Date bind:data={date} show={showDate} on:date-change={handleDateChanged} useDayName={useDayNames}/>
+    <Date bind:data={date} show={showDate} on:date-change={handleDateChanged}/>
     <Time bind:data={time} on:time-change/>
-    {#if isEditing}
-        <form on:submit|preventDefault={handleSubmit} class="edit-entry-form">
-            <input use:inputAdded bind:value={content} on:blur={handleCancelEdit}
-                   on:keydown={handleKeyDown}/>
-        </form>
-    {:else}
-        <span draggable=true  on:click={handleEdit}
-              on:dragend={handleDragEnd}
-              on:dragstart|stopPropagation={handleDragStart}>{content}</span>
-    {/if}
+    <span class="entry-text">
+        {#if isEditing}
+            <form on:submit|preventDefault={handleSubmit} class="edit-entry-form">
+                <input use:inputAdded bind:value={content} on:blur={handleCancelEdit}
+                       on:keydown={handleKeyDown}/>
+            </form>
+        {:else}
+            <span draggable=true  on:click={handleEdit}
+                  on:dragend={handleDragEnd}
+                  on:dragstart|stopPropagation={handleDragStart}>{content}</span>
+        {/if}
+    </span>
     <i class="fas fa-trash-alt" on:click={handleRemove} />
 </span>

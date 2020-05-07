@@ -1,6 +1,5 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import './Section.css';
 
     const dispatch = createEventDispatcher();
     export let name = "";
@@ -22,6 +21,15 @@
 
 </script>
 
+<style>
+    .entries-section {
+        font-size: 20px;
+    }
+
+    .dragged-on {
+        border: blue solid 1px;
+    }
+</style>
 
 
 <div class="entries-section" class:dragged-on="{dragCounter > 0}"
