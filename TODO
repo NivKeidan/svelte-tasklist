@@ -1,9 +1,3 @@
-remove headers of sections
-create separators between sections
-inside weekly, give each row a space
-make the left margin smaller
-make the X button smaller and bolder
-maybe show x only when hovering?
 for every section, make everything be in "columns" - date under date, text under text, etc..
 
 try and come closer to design finalization

@@ -60,11 +60,14 @@
 </script>
 
 <style>
+    .upcoming-row {
+        margin-bottom: 2%;
+    }
 </style>
 
 <div class="entries-upcoming"  ondragover="return false">
     {#each Object.entries(datedEntries) as [date, entries], ind }
-        <div>
+        <div class="upcoming-row">
             <Date useDayName={true} bind:data={date} changeable={false}/>
             {#each entries as entry (entry.id) }
                 <Entry on:remove-entry={handleRemoveEntry}

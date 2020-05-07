@@ -1,12 +1,7 @@
-.section {
-    margin-left: 10%;
+.entries-section {
     font-size: 25px;
 }
 
 .dragged-on {
     border: blue solid 1px;
-}
-
-.section-header {
-    margin-bottom: 2%;
 }

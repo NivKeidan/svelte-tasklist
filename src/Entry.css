@@ -11,5 +11,14 @@
 }
 
 .oneLiner {
-    display: block;
+    display: inline-block;
+    width: 100%;
+}
+
+.fa-trash-alt {
+    color: black;
+}
+
+.fa-trash-alt:hover {
+    color: red;
 }

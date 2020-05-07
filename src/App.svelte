@@ -11,6 +11,7 @@
 	import FutureEntries from './FutureEntries.svelte';
 	import EntryInput from './EntryInput.svelte';
 	import Header from './Header.svelte';
+	import SectionSeaprator from './SectionSeaprator.svelte';
 
 	import './App.css';
 
@@ -213,6 +214,8 @@
 		/>
 	</Section>
 
+	<SectionSeaprator/>
+
 	<Section name={SECTIONS.UPCOMING} on:drag-drop={handleDragDrop}>
 		<UpcomingEntries bind:entries={weeklyEntries}
 					   on:section-change={handleSectionChanged}
@@ -220,6 +223,8 @@
 					   on:drag-start={handleDragStart}
 		/>
 	</Section>
+
+	<SectionSeaprator/>
 
 	<Section name={SECTIONS.FUTURE} on:drag-drop={handleDragDrop}>
 		<FutureEntries bind:entries={futureEntries}

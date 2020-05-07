@@ -68,7 +68,6 @@
 </script>
 
 <span class="entry" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
-    <button on:click={handleRemove} >X</button>
     <Date bind:data={date} show={showDate} on:date-change={handleDateChanged} useDayName={useDayNames}/>
     <Time bind:data={time} on:time-change/>
     {#if isEditing}
@@ -81,4 +80,5 @@
               on:dragend={handleDragEnd}
               on:dragstart|stopPropagation={handleDragStart}>{content}</span>
     {/if}
+    <i class="fas fa-trash-alt" on:click={handleRemove} />
 </span>

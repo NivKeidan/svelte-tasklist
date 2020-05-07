@@ -24,10 +24,9 @@
 
 
 
-<div class="section" class:dragged-on="{dragCounter > 0}"
+<div class="entries-section" class:dragged-on="{dragCounter > 0}"
      on:dragenter={handleDragEnter}
      on:dragleave={handleDragLeave}
      on:drop|preventDefault={handleDragDrop}>
-    <div class="section-header"><u><b>{name} Tasks:</b></u></div>
         <slot/>
 </div>
