@@ -15,11 +15,11 @@
     width: 100%;
 }
 
-.fa-trash-alt {
+.icon-remove-entry {
     color: black;
 }
 
-.fa-trash-alt:hover {
+.icon-remove-entry:hover {
     color: red;
 }
 

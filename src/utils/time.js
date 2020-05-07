@@ -1,31 +1,18 @@
-const weekDayRegex = RegExp("sunday|monday|tuesday|wednesday|thursday|friday|saturday");
-const dateRegex = RegExp("[1-9][0-9]?[./][1-9][0-2]?");
-const wordDayRegex = RegExp("today|tdy|tmrw|tomorrow");
-const inXtime = RegExp("in [0-9]+ day[s]?|in [0-9]+ week[s]?|in [0-9]+ month[s]?|in [0-9]+ year[s]?");
-export const DATE_REGEX = RegExp("\\b"+inXtime.source+"|"+wordDayRegex.source+"|"+weekDayRegex.source+"|"+dateRegex.source + "\\b", "gi");
+import {NullTime} from "./constants";
+
+const dateRegexes = [
+    "in [0-9]+ day[s]?|in [0-9]+ week[s]?|in [0-9]+ month[s]?|in [0-9]+ year[s]?",
+    "today|tdy|tmrw|tomorrow",
+    "[1-9][0-9]?[./][1-9][0-2]?",
+    "sunday|monday|tuesday|wednesday|thursday|friday|saturday",
+]
+
+export const DATE_REGEX = RegExp("\\b"+combineRegexes(dateRegexes)+"\\b", "gi");
 export const TIME_REGEX = RegExp("\\b[012][0-9][0-5][0-9]\\b", "g");
 
 export function getDaysFromToday(n) {
     let d = new Date();
     d.setDate(d.getDate() + n);
-    return dateToString(d);
-}
-
-function getYearsFromToday(n) {
-    let d = new Date();
-    d.setFullYear(d.getFullYear() + n);
-    return dateToString(d);
-}
-
-function getMonthsFromToday(n) {
-    let d = new Date();
-    d.setMonth(d.getMonth() + n);
-    return dateToString(d);
-}
-
-function getWeeksFromToday(n) {
-    let d = new Date();
-    d.setDate(d.getDate() + (n*7));
     return dateToString(d);
 }
 
@@ -70,7 +57,7 @@ export function analyzeDateString(dateString) {
             return getWeeksFromToday(parseInt(res[1]));
     }
 
-    regex = RegExp("^([1-9][0-9])?[./]([1-9][0-2]?)", "i");
+    regex = RegExp("^([1-9][0-9]?)[./]([1-9][0-2]?)$", "i");
     res = dateString.match(regex);
     if (res !== null) {
         let day = parseInt(res[1]);
@@ -89,15 +76,7 @@ export function analyzeDateString(dateString) {
 export function analyzeTimeString(timeString) {
     if (timeString !== "")
         return timeString;
-    return getDefaultTime;
-}
-
-function dateToString(d) {
-    const year = d.getFullYear();
-    const month = d.getMonth()+1;
-    const day = d.getDate();
-    let a = ""+year+(month < 10 ? "0"+month : month)+(day < 10 ? "0"+day : day);
-    return a;
+    return NullTime;
 }
 
 export function getLastUpcomingDateString() {
@@ -121,6 +100,40 @@ export function breakApart(dateString) {
     return returnObj;
 }
 
+function getYearsFromToday(n) {
+    let d = new Date();
+    d.setFullYear(d.getFullYear() + n);
+    return dateToString(d);
+}
+
+function getMonthsFromToday(n) {
+    let d = new Date();
+    d.setMonth(d.getMonth() + n);
+    return dateToString(d);
+}
+
+function getWeeksFromToday(n) {
+    let d = new Date();
+    d.setDate(d.getDate() + (n*7));
+    return dateToString(d);
+}
+
+function combineRegexes(regexArr) {
+    let t = "";
+    for (let i = 0; i < regexArr.length; i++) {
+        t = t + regexArr[i] + "|"
+    }
+    t = t.substring(0, t.length - 1); // Remove last |
+    return t;
+}
+
+function dateToString(d) {
+    const year = d.getFullYear();
+    const month = d.getMonth()+1;
+    const day = d.getDate();
+    return ""+year+(month < 10 ? "0"+month : month)+(day < 10 ? "0"+day : day);
+}
+
 function stringToDate(dateString) {
     const dateParts = breakApart(dateString);
 
@@ -141,5 +154,8 @@ function dateByDayMonth(day, month) {
     let d = new Date();
     d.setMonth(month-1);
     d.setDate(day);
+    const today = new Date();
+    if (d < today)
+        d.setFullYear(today.getFullYear() + 1);
     return dateToString(d);
 }

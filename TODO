@@ -1,9 +1,9 @@
-make easier to add more time/date regexes (code-wise)
 enter key after picking date/time from options adds entry
 bring dragging to final usage (move inside sections, etc)
-find better marking of no time shown
 decide on final sections and implement them
+
 STOP HERE AND CONSIDER WHATS NEXT
+
 consider adding animations - for fun or practice
 integrate offline usage (cookies?)
 add saved (or online/offline) indication

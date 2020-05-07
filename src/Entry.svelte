@@ -2,6 +2,8 @@
     import { createEventDispatcher } from 'svelte';
     import Date from './Date.svelte';
     import Time from './Time.svelte';
+    import Fa from 'svelte-fa';
+    import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
     import {inputAdded} from './utils/forms';
     import {getDaysFromToday} from './utils/time';
     import {NullTime, SHOW_DATE} from './utils/constants';
@@ -81,5 +83,5 @@
                   on:dragstart|stopPropagation={handleDragStart}>{content}</span>
         {/if}
     </span>
-    <i class="fas fa-trash-alt" on:click={handleRemove} />
+   <Fa class="icon-remove-entry" icon={faTrashAlt}/>
 </span>
