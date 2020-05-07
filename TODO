@@ -1,17 +1,14 @@
 make green border be nicer visually for dragging
-handle sorting between null time, or same time, etc
-
 decide on final sections and implement them
-STOP HERE AND CONSIDER WHATS NEXT
-
-consider adding animations - for fun or practice
-integrate offline usage (cookies?)
+replace all console.log errors to show them properly
 add saved (or online/offline) indication
+integrate offline usage (cookies?)
 find server to use
+WE ARE BASICALLY DONE HERE!
 convert/maintain android app
-consider switching to save API to be only new change
+consider switching to save API to be only new change?
 consider getting new IDs from the server? (or just max id, or something)
 add undo for actions
-replace all console.log errors to show them properly
+consider adding animations - for fun or practice
 add vocal insertion of new entries
 clicking c opens calendar view (to see dates and stuff)

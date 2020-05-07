@@ -107,7 +107,7 @@ export function intToTimeString(n) {
         return "00"+n;
     else if (n < 1000)
         return "0" + n;
-    return n;
+    return "" + n;
 }
 
 function getYearsFromToday(n) {

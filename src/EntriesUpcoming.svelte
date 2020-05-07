@@ -63,7 +63,7 @@
 <style>
     .upcoming-row {
         display: grid;
-        grid-template-columns: 6% 4% auto;
+        grid-template-columns: 6% 4% auto auto;
     }
     .no-entries {
         grid-template-columns: 6% auto auto;
@@ -76,6 +76,9 @@
     }
     .date-grid-child-rest {
         grid-column: 3;
+    }
+    .date-grid-child-last {
+        grid-column: 4;
     }
 </style>
 
@@ -100,6 +103,9 @@
                            showDate={SHOW_DATE.NONE}/>
                     <EntrySeparator date={date} preSeparatorEntryTime={entry.time} on:drag-drop/>
                 {/each}
+                <span class="date-grid-child-last">
+                    <EntrySeparator date={date} preSeparatorEntryTime="9998" on:drag-drop fillSpace={true}/>
+                </span>
             </span>
         </div>
     {/each}

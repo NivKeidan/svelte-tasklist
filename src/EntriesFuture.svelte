@@ -53,7 +53,7 @@
 <style>
     .entries-future {
         display: grid;
-        grid-template-columns: 5% 4% auto;
+        grid-template-columns: 5% 4% auto auto;
     }
     .date-grid-child-first {
         grid-column: 1;
@@ -64,8 +64,11 @@
     .date-grid-child-rest {
         grid-column: 3;
     }
+    .date-grid-child-last {
+        grid-column: 4;
+    }
     .date-grid-child-all {
-        grid-column: 1 / span 3;
+        grid-column: 1 / span 4;
     }
 </style>
 
@@ -93,6 +96,9 @@
                        showDate={SHOW_DATE.ICON}/>
                 <EntrySeparator date={date} preSeparatorEntryTime={entry.time} on:drag-drop/>
             {/each}
+            <span class="date-grid-child-last">
+                <EntrySeparator date={date} preSeparatorEntryTime="9998" on:drag-drop fillSpace={true}/>
+            </span>
         </span>
     {/each}
 </div>

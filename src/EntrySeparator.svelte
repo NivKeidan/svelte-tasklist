@@ -31,8 +31,8 @@
 
 <style>
     .in-line {
-        padding-left: 1%;
-        padding-right: 1%;
+        padding-left: 2%;
+        padding-right: 2%;
     }
     .fill-space {
         padding-right: 40%;
