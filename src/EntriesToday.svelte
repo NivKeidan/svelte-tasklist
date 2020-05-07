@@ -1,7 +1,7 @@
 <script>
     import {createEventDispatcher} from 'svelte';
     import Entry from './Entry.svelte';
-    import {SECTIONS, SHOW_DATE} from './constants';
+    import {SECTIONS, SHOW_DATE} from './utils/constants';
 
     const dispatch = createEventDispatcher();
 

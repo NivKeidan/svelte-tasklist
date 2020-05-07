@@ -1,6 +1,6 @@
 <script>
     import {inputAdded} from './utils/forms';
-    import {SHOW_DATE} from './constants';
+    import {SHOW_DATE} from './utils/constants';
     import { createEventDispatcher } from 'svelte';
     import { getDayName, breakApart } from './utils/time';
     import './Date.css';

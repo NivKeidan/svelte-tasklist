@@ -4,7 +4,7 @@
     import Entry from './Entry.svelte';
     import Date from './Date.svelte';
     import EntrySeparator from './EntrySeparator.svelte';
-    import { SECTIONS, SHOW_DATE} from './constants';
+    import { SECTIONS, SHOW_DATE} from './utils/constants';
 
     const dispatch = createEventDispatcher();
     const displayDaysNum = 7;
@@ -62,7 +62,6 @@
 
 <style>
     .upcoming-row {
-        margin-bottom: 2%;
         display: grid;
         grid-template-columns: 8% auto;
     }

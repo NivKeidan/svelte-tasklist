@@ -1,5 +1,3 @@
-rename xEntries to entriesX
-move constants to utils
 remove svelma
 
 COMMIT B4: use font-awesome as package and not css load (minimizes load time and removes ugly cookie)

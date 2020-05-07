@@ -3,12 +3,12 @@
 
 	import {onMount} from 'svelte';
 	import {getDaysFromToday, getLastUpcomingDateString} from './utils/time';
-	import { SECTIONS } from './constants';
+	import { SECTIONS } from './utils/constants';
 
-	import TodayEntries from './TodayEntries.svelte';
+	import TodayEntries from './EntriesToday.svelte';
 	import Section from './Section.svelte';
-	import UpcomingEntries from './UpcomingEntries.svelte';
-	import FutureEntries from './FutureEntries.svelte';
+	import UpcomingEntries from './EntriesUpcoming.svelte';
+	import FutureEntries from './EntriesFuture.svelte';
 	import EntryInput from './EntryInput.svelte';
 	import Header from './Header.svelte';
 	import SectionSeaprator from './SectionSeaprator.svelte';

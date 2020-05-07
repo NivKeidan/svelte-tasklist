@@ -4,7 +4,7 @@
     import Time from './Time.svelte';
     import {inputAdded} from './utils/forms';
     import {getDaysFromToday} from './utils/time';
-    import {NullTime, SHOW_DATE} from './constants';
+    import {NullTime, SHOW_DATE} from './utils/constants';
     import './Entry.css';
 
     const dispatch = createEventDispatcher();

@@ -1,6 +1,6 @@
 <script>
     import {inputAdded} from './utils/forms';
-    import {NullTime} from './constants';
+    import {NullTime} from './utils/constants';
     import {createEventDispatcher, onMount} from 'svelte';
     import './Time.css';
     import TimeIcon from './IconTime.svelte';

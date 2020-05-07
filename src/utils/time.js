@@ -1,5 +1,3 @@
-import { SECTIONS } from '../constants';
-
 const weekDayRegex = RegExp("sunday|monday|tuesday|wednesday|thursday|friday|saturday");
 const dateRegex = RegExp("[1-9][0-9]?[./][1-9][0-2]?");
 const wordDayRegex = RegExp("today|tdy|tmrw|tomorrow");

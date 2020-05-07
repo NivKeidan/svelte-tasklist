@@ -3,7 +3,7 @@
     import Entry from './Entry.svelte';
     import Date from './Date.svelte';
     import EntrySeparator from './EntrySeparator.svelte';
-    import { SECTIONS, SHOW_DATE } from './constants';
+    import { SECTIONS, SHOW_DATE } from './utils/constants';
 
     const dispatch = createEventDispatcher();
 
