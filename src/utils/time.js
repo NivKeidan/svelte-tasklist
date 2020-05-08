@@ -1,5 +1,3 @@
-import {NullTime, NullTimeMin} from "./constants";
-
 const dateRegexes = [
     "in [0-9]+ day[s]?|in [0-9]+ week[s]?|in [0-9]+ month[s]?|in [0-9]+ year[s]?",
     "today|tdy|tmrw|tomorrow",
@@ -7,6 +5,10 @@ const dateRegexes = [
     "sunday|monday|tuesday|wednesday|thursday|friday|saturday",
 ]
 
+const AutoSetChar = "A";
+export const AutoTimeMin = AutoSetChar+"0000";
+export const AutoTimeMax = AutoSetChar+"9999";
+export const AutoTimeDefault = AutoSetChar+"5000";
 export const DATE_REGEX = RegExp("\\b"+combineRegexes(dateRegexes)+"\\b", "gi");
 export const TIME_REGEX = RegExp("\\b[012][0-9][0-5][0-9]\\b", "g");
 
@@ -100,19 +102,23 @@ export function breakApart(dateString) {
     return returnObj;
 }
 
-export function intToTimeString(n) {
-    if (n < 10)
-        return "000" + n;
-    else if (n < 100)
-        return "00"+n;
-    else if (n < 1000)
-        return "0" + n;
-    return "" + n;
+export function getDisplayString(d) {
+    if (isAutoSetTime(d))
+        return d.slice(1,3) + ":" + d.slice(3);
+    return d.slice(0,2) + ":" + d.slice(2);
 }
 
-export function isNullTime(t) {
-    return t >= NullTimeMin;
+export function getNewTime(prevTime, postTime=AutoTimeMax) {
+    let prevTimeValue = getTimeValue(prevTime);
+    const difference = parseInt(getTimeValue(postTime)) - parseInt(prevTimeValue);
+    const expectedIntValue = parseInt(prevTimeValue) + Math.floor(difference / 2);
+    if (expectedIntValue > AutoTimeMax)
+        return AutoTimeMax;
+    if (expectedIntValue < AutoTimeMin)
+        return AutoTimeMin;
+    return AutoSetChar + expectedIntValue.toString();
 }
+
 function getYearsFromToday(n) {
     let d = new Date();
     d.setFullYear(d.getFullYear() + n);
@@ -171,4 +177,18 @@ function dateByDayMonth(day, month) {
     if (d < today)
         d.setFullYear(today.getFullYear() + 1);
     return dateToString(d);
+}
+
+export function isAutoSetTime(t) {
+    return t[0] === AutoSetChar;
+}
+
+export function timeCompareFn(a, b) {
+    return getTimeValue(a) - getTimeValue(b);
+}
+
+function getTimeValue(t) {
+    if (isAutoSetTime(t))
+        return t.substring(1);
+    return t;
 }

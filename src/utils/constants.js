@@ -10,8 +10,3 @@ export const SHOW_DATE = {
     DAY: "DayName",
     FULL: "Full"
 }
-
-export const NullTimeMin = "2500";
-export const NullTimeMax = "9999";
-export const NullTime = "6249";
-export const NullTimeGap = "100";

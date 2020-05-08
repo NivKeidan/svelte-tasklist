@@ -1,7 +1,7 @@
 <script>
     import {inputAdded} from './utils/forms';
     import {createEventDispatcher, onMount} from 'svelte';
-    import {isNullTime} from './utils/time';
+    import {isAutoSetTime, getDisplayString} from './utils/time';
     import './Time.css';
     import TimeIcon from './IconTime.svelte';
 
@@ -12,7 +12,7 @@
     const dispatch = createEventDispatcher();
 
     onMount( async () => {
-        if (isNullTime(data))
+        if (isAutoSetTime(data))
             show = false;
     });
 
@@ -23,7 +23,7 @@
     }
 
     function handleClick(e) {
-        if (isNullTime(data))
+        if (isAutoSetTime(data))
             inputValue = "0000";
         else
             inputValue = data;
@@ -74,7 +74,7 @@
     }
 
     function getDisplay() {
-        return data.slice(0, 2) + ":" + data.slice(2);
+        return getDisplayString(data);
     }
 </script>
 

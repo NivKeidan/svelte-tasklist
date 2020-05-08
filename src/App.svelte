@@ -2,8 +2,9 @@
 	import 'bulma/css/bulma.css';
 
 	import {onMount} from 'svelte';
-	import {getDaysFromToday, getLastUpcomingDateString, intToTimeString, isNullTime} from './utils/time';
-	import { SECTIONS, NullTime, NullTimeGap } from './utils/constants';
+	import {getDaysFromToday, getLastUpcomingDateString} from './utils/time';
+	import {timeCompareFn, AutoTimeDefault, getNewTime} from './utils/time';
+	import { SECTIONS } from './utils/constants';
 
 	import TodayEntries from './EntriesToday.svelte';
 	import UpcomingEntries from './EntriesUpcoming.svelte';
@@ -80,7 +81,7 @@
 		let sectionObject = getEntriesObject(section);
 		sectionObject.sort((a,b) => {
 			if (a.date === b.date)
-				return a.time - b.time;
+				return timeCompareFn(a.time,b.time);
 			else
 				return a.date - b.date;
 		});
@@ -104,32 +105,19 @@
 		if (entry.date <= getDaysFromToday(0))
 			section = SECTIONS.DAILY;
 
-		if (entry.time === undefined || entry.time === null) {
-			entry.time = getCurrentNullTime(section, entry);
+		if (entry.time === undefined || entry.time === null) {  // new entry, no time def
+			let lastSectionEntry = getLastEntry(section);
+			if (lastSectionEntry === undefined)
+				entry.Time = AutoTimeDefault;
+			else
+				entry.time = getNewTime(lastSectionEntry.time);
 		}
 		insertEntry(section, entry, saveChanges);
 	}
 
-	function getCurrentNullTime(sectionName, entry) {
-		let latestTime;
-		if (sectionName === SECTIONS.DAILY) {
-			const lastEntry = dailyEntries[dailyEntries.length - 1];
-			if (lastEntry == null || !isNullTime(lastEntry.time))
-				return NullTime;
-			latestTime = lastEntry.time;
-		}
-
-		else if (sectionName === SECTIONS.FUTURE || sectionName === SECTIONS.UPCOMING) {
-			const sectionObj = getEntriesObject(sectionName);
-			sectionObj.forEach( e => {
-				if (e.date === entry.date && (latestTime === undefined || e.time > latestTime))
-					latestTime = e.time;
-			})
-			if (latestTime === undefined)
-				return NullTime;
-		}
-
-		return (parseInt(latestTime)+NullTimeGap).toString();
+	function getLastEntry(sectionName) {
+		const entriesObj = getEntriesObject(sectionName);
+		return entriesObj[entriesObj.length - 1];
 	}
 
 	function getAllEntries() {
@@ -204,7 +192,7 @@
 		let entry = getEntryById(dragOrigin, draggedEntryId);
 		removeEntryById(dragOrigin, draggedEntryId, false);
 		entry.date = e.detail.targetDate;
-		entry.time = intToTimeString(e.detail.targetTime);
+		entry.time = e.detail.targetTime;
 		insertNewEntry(entry);
 	}
 

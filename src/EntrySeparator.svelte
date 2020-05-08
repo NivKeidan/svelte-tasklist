@@ -1,9 +1,6 @@
 <script>
-    export let date;
-    export let preSeparatorEntryTime;
     export let fullLine = false;
     export let fillSpace = false;
-    import {NullTimeMax} from './utils/constants';
     import { createEventDispatcher } from 'svelte';
 
     const dispatch = createEventDispatcher();
@@ -17,13 +14,9 @@
         dragCounter--;
     }
 
-    function getTargetTime() {
-        return Math.min(parseInt(NullTimeMax), parseInt(preSeparatorEntryTime)+1);
-    }
-
     function handleDragDrop(e) {
         dragCounter = 0;
-        dispatch('drag-drop', {targetDate: date, targetTime: getTargetTime()});
+        dispatch('drag-drop', {});
     }
 </script>
 

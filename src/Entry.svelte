@@ -5,14 +5,14 @@
     import Fa from 'svelte-fa';
     import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
     import {inputAdded} from './utils/forms';
-    import {getDaysFromToday} from './utils/time';
-    import {NullTime, SHOW_DATE} from './utils/constants';
+    import {getDaysFromToday, AutoTimeDefault} from './utils/time';
+    import {SHOW_DATE} from './utils/constants';
     import './Entry.css';
 
     const dispatch = createEventDispatcher();
     export let content = "This entry has no content wtf?!?!";
     export let date = getDaysFromToday(0);
-    export let time = NullTime;
+    export let time = AutoTimeDefault;
     export let id = 0;
     export let showDate = SHOW_DATE.FULL;
     export let oneLiner = false;

@@ -4,7 +4,7 @@
     import Date from './Date.svelte';
     import EntrySeparator from './EntrySeparator.svelte';
     import { SECTIONS, SHOW_DATE } from './utils/constants';
-    import { getDaysFromToday } from './utils/time';
+    import { AutoTimeMin, AutoTimeMax, getNewTime, getDaysFromToday} from './utils/time';
 
     const dispatch = createEventDispatcher();
 
@@ -48,6 +48,68 @@
         dispatch('section-change', {section: SECTIONS.FUTURE});
     }
 
+    function getFirstEntry(date) {
+        return datedEntries[date][0];
+    }
+
+    function getLastEntry(date) {
+        const len = datedEntries[date].length;
+        return datedEntries[date][len-1];
+    }
+
+    function getEntryById(id) {
+        for (let i = 0; i < entries.length; i++) {
+            if (entries[i].id === id)
+                return entries[i];
+        }
+    }
+
+    function getEntryAfterEntryById(date, id) {
+        for (let i = 0; i < datedEntries[date].length; i++) {
+            if (datedEntries[date][i].id === id)
+                return datedEntries[date][i+1];
+        }
+    }
+
+    function handleDragDrop(date, previousEntryId) {
+        let targetDate = date;
+        let prevEntryTime;
+        let postEntryTime;
+
+        if (previousEntryId === "empty") {
+            targetDate = getDaysFromToday(8);
+            prevEntryTime = AutoTimeMin;
+            postEntryTime = AutoTimeMax;
+        }
+
+        else if (previousEntryId === "first") {
+            prevEntryTime = AutoTimeMin;
+            const firstEntry = getFirstEntry(date);
+            if (firstEntry === undefined)
+                postEntryTime = AutoTimeMax;
+            else
+                postEntryTime = firstEntry.time;
+        }
+
+        else if (previousEntryId === "last") {
+            postEntryTime = AutoTimeMax;
+            const lastEntry = getLastEntry(date);
+            if (lastEntry === undefined)
+                prevEntryTime = AutoTimeMin;
+            else
+                prevEntryTime = lastEntry.time;
+        }
+        else {
+            prevEntryTime = getEntryById(previousEntryId).time;
+            const postEntry = getEntryAfterEntryById(date, previousEntryId);
+            if (postEntry === undefined)
+                postEntryTime = AutoTimeMax;
+            else
+                postEntryTime = postEntry.time;
+        }
+        dispatch('drag-drop',  {targetDate, targetTime: getNewTime(prevEntryTime, postEntryTime)});
+    }
+
 </script>
 
 <style>
@@ -75,7 +137,7 @@
 <div class="entries-future"  ondragover="return false">
     {#if Object.keys(datedEntries).length === 0}
         <span class="date-grid-child-all">
-            <EntrySeparator date={getDaysFromToday(8)} preSeparatorEntryTime="-1" on:drag-drop fillSpace={true}/>
+            <EntrySeparator on:drag-drop={e => handleDragDrop("", "empty")} fillSpace={true}/>
         </span>
     {/if}
     {#each Object.keys(datedEntries) as date (date) }
@@ -83,7 +145,7 @@
             <Date bind:data={date} changeable={false}/>
         </span>
         <span class="date-grid-child-second">
-            <EntrySeparator date={date} preSeparatorEntryTime="-1" on:drag-drop fillSpace={true}/>
+            <EntrySeparator on:drag-drop={e => handleDragDrop(date, "first")} fillSpace={true}/>
         </span>
         <span class="date-grid-child-rest">
             {#each datedEntries[date] as entry (entry.id) }
@@ -94,10 +156,10 @@
                        on:time-change={handleTimeChange}
                        on:text-change={handleGeneralChange}
                        showDate={SHOW_DATE.ICON}/>
-                <EntrySeparator date={date} preSeparatorEntryTime={entry.time} on:drag-drop/>
+                <EntrySeparator on:drag-drop={e => handleDragDrop(date, entry.id)}/>
             {/each}
             <span class="date-grid-child-last">
-                <EntrySeparator date={date} preSeparatorEntryTime="9998" on:drag-drop fillSpace={true}/>
+                <EntrySeparator on:drag-drop={e => handleDragDrop(date, "last")} fillSpace={true}/>
             </span>
         </span>
     {/each}

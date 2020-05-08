@@ -1,6 +1,6 @@
 make green border be nicer visually for dragging
 make date editing of existing entry to accept all sorts of expressions + add full date string as part of regex
-decide on final sections and implement them
+add svelte linter
 replace all console.log errors to show them properly
 add saved (or online/offline) indication
 integrate offline usage (cookies?)
