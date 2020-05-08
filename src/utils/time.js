@@ -1,7 +1,7 @@
 const dateRegexes = [
     "in [0-9]+ day[s]?|in [0-9]+ week[s]?|in [0-9]+ month[s]?|in [0-9]+ year[s]?",
     "today|tdy|tmrw|tomorrow",
-    "[1-9][0-9]?[./][1-9][0-2]?",
+    "[1-9][0-9]?[./][1-9][0-2]?([./](2[0-9]{3}|[2-9][0-9]))?",
     "sunday|monday|tuesday|wednesday|thursday|friday|saturday",
 ]
 
@@ -70,6 +70,25 @@ export function analyzeDateString(dateString) {
             console.log("invalid month: " + res[2]);
         else
             return dateByDayMonth(day, month);
+    }
+
+    regex = RegExp("^([1-9][0-9]?)[./]([1-9][0-2]?)[./](2[0-9]{3}|[2-9][0-9])$", "i");
+    res = dateString.match(regex);
+    if (res !== null) {
+        let day = parseInt(res[1]);
+        let month = parseInt(res[2]);
+        let year = parseInt(res[3]);
+        console.log(year);
+        if (day < 1 || day > 31)
+            console.log("invalid day: " + res[1]);
+        else if (month < 1 || month > 12)
+            console.log("invalid month: " + res[2]);
+        else if (year < 100 && year + 2000 < 2020)  // 2 digits
+            console.log("invalid year: " + res[3]);
+        else if (year > 999 && year < 2020)
+            console.log("invalid year: " + res[3]);
+        else
+            return dateByDayMonthYear(day, month, year);
     }
 
     return "";
@@ -183,6 +202,19 @@ function dateByDayMonth(day, month) {
     const today = new Date();
     if (d < today)
         d.setFullYear(today.getFullYear() + 1);
+    return dateToString(d);
+}
+
+function dateByDayMonthYear(day, month, year) {
+    let d = new Date();
+    let fullYear;
+    d.setMonth(month-1);
+    d.setDate(day);
+    const today = new Date();
+    if (d < today)
+        d.setFullYear(today.getFullYear() + 1);
+    year < 100 ? fullYear = 2000 + year : fullYear = year;
+    d.setFullYear(fullYear);
     return dateToString(d);
 }
 
