@@ -20,7 +20,7 @@
     let isEditing = false;
     let isDragged = false;
 
-    function handleDateChanged(e) {
+    function handleDateChanged() {
         dispatch('date-change', {entryId: id})
     }
 
@@ -51,12 +51,12 @@
         }
     }
 
-    function handleDragStart(e) {
+    function handleDragStart() {
         dispatch('drag-start', {"entryId": id});
         isDragged = true;
     }
 
-    function handleDragEnd(e) {
+    function handleDragEnd() {
         isDragged = false;
     }
 

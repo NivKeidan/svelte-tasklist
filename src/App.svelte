@@ -40,7 +40,7 @@
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify(allEntries),
 		}).
-		then(data => console.log("saved success")).
+		then(() => console.log("saved success")).
 		catch(err => console.log("save failed", err));
 	}
 

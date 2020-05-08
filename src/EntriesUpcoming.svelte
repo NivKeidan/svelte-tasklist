@@ -10,7 +10,6 @@
     const dispatch = createEventDispatcher();
     const displayDaysNum = 7;
     export let entries = [];
-    let dragCounter = 0;
     let datedEntries = getBaseDatedEntriesObject();
 
     $: {
@@ -50,13 +49,13 @@
         dispatch('date-change', {section: SECTIONS.UPCOMING, entryId: e.detail.entryId});
     }
 
-    function handleTimeChange(e) {
+    function handleTimeChange() {
         sortDatedEntries();
         datedEntries = datedEntries;
         dispatch('section-change', {section: SECTIONS.UPCOMING});
     }
 
-    function handleGeneralChange(e) {
+    function handleGeneralChange() {
         dispatch('section-change', {section: SECTIONS.UPCOMING});
     }
 
@@ -147,7 +146,7 @@
                 <Date bind:data={date} changeable={false} show={SHOW_DATE.DAY}/>
             </span>
             <span class="date-grid-child-second">
-                <EntrySeparator on:drag-drop={e => handleDragDrop(date, "first")} fillSpace={true}/>
+                <EntrySeparator on:drag-drop={() => handleDragDrop(date, "first")} fillSpace={true}/>
             </span>
             <span class="date-grid-child-rest">
                 {#each entries as entry (entry.id) }
@@ -159,10 +158,10 @@
                            on:time-change={handleTimeChange}
                            on:text-change={handleGeneralChange}
                            showDate={SHOW_DATE.NONE}/>
-                    <EntrySeparator on:drag-drop={e => handleDragDrop(date, entry.id)}/>
+                    <EntrySeparator on:drag-drop={() => handleDragDrop(date, entry.id)}/>
                 {/each}
                 <span class="date-grid-child-last">
-                    <EntrySeparator on:drag-drop={e => handleDragDrop(date, "last")} fillSpace={true}/>
+                    <EntrySeparator on:drag-drop={() => handleDragDrop(date, "last")} fillSpace={true}/>
                 </span>
             </span>
         </div>

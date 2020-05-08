@@ -6,15 +6,15 @@
     const dispatch = createEventDispatcher();
     let dragCounter = 0;
 
-    function handleDragEnter(e) {
+    function handleDragEnter() {
         dragCounter++;
     }
 
-    function handleDragLeave(e) {
+    function handleDragLeave() {
         dragCounter--;
     }
 
-    function handleDragDrop(e) {
+    function handleDragDrop() {
         dragCounter = 0;
         dispatch('drag-drop', {});
     }

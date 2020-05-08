@@ -19,7 +19,7 @@
         }
     }
 
-    function handleClick(e) {
+    function handleClick() {
         if (changeable) {
             inputValue = data;
             isEditing = true;
@@ -30,7 +30,7 @@
         isEditing = false;
     }
 
-    function handleSubmit(e) {
+    function handleSubmit() {
         if (data === inputValue) {
             cancelEdit();
             return

@@ -78,7 +78,7 @@ export function analyzeDateString(dateString) {
 export function analyzeTimeString(timeString) {
     if (timeString !== "")
         return timeString;
-    return NullTime;
+    return AutoTimeDefault;
 }
 
 export function getLastUpcomingDateString() {

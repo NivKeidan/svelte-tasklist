@@ -2,8 +2,6 @@
     import { createEventDispatcher, afterUpdate } from 'svelte';
     import { analyzeDateString, analyzeTimeString, DATE_REGEX, TIME_REGEX } from './utils/time';
     import './EntryInput.css';
-    import DateIcon from './IconDate.svelte';
-    import TimeIcon from './IconTime.svelte';
 
     const dispatch = createEventDispatcher();
     let text = "";
@@ -75,11 +73,11 @@
 <div class="input-div" on:keydown={handleKeyDown}>
     <span class="inputs-found">
         {#each dateStrings as ds, i}
-            <span class="input-date" class:date-selected="{i === selectedDateIndex}" on:click="{e => handleDateClick(i)}">{ds}</span>
+            <span class="input-date" class:date-selected="{i === selectedDateIndex}" on:click="{() => handleDateClick(i)}">{ds}</span>
         {/each}
 
         {#each timeStrings as ts, i}
-            <span class="input-time" class:time-selected="{i === selectedTimeIndex}" on:click="{e => handleTimeClick(i)}">{ts}</span>
+            <span class="input-time" class:time-selected="{i === selectedTimeIndex}" on:click="{() => handleTimeClick(i)}">{ts}</span>
         {/each}
     </span>
     <input bind:value={text} class="entry-input" bind:this={inputElement}/>

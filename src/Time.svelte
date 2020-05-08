@@ -1,6 +1,6 @@
 <script>
     import {inputAdded} from './utils/forms';
-    import {createEventDispatcher, onMount} from 'svelte';
+    import {createEventDispatcher} from 'svelte';
     import {isAutoSetTime, getDisplayString, convertToAuto} from './utils/time';
     import './Time.css';
     import TimeIcon from './IconTime.svelte';
@@ -16,7 +16,7 @@
         }
     }
 
-    function handleClick(e) {
+    function handleClick() {
         if (isAutoSetTime(data))
             inputValue = "0000";
         else
@@ -28,7 +28,7 @@
         isEditing = false;
     }
 
-    function handleSubmit(e) {
+    function handleSubmit() {
         if (inputValue === data) {  // No change
             cancelEdit();
         }

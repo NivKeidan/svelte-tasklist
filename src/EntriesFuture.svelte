@@ -9,7 +9,6 @@
     const dispatch = createEventDispatcher();
 
     export let entries = [];
-    let dragCounter = 0;
     let datedEntries = {};
 
     $: {
@@ -38,11 +37,11 @@
         dispatch('drag-start', {section: SECTIONS.FUTURE, entryId: e.detail.entryId})
     }
 
-    function handleGeneralChange(e) {
+    function handleGeneralChange() {
         dispatch('section-change', {section: SECTIONS.FUTURE});
     }
 
-    function handleTimeChange(e) {
+    function handleTimeChange() {
         sortDatedEntries();
         datedEntries = datedEntries;
         dispatch('section-change', {section: SECTIONS.FUTURE});
@@ -137,7 +136,7 @@
 <div class="entries-future"  ondragover="return false">
     {#if Object.keys(datedEntries).length === 0}
         <span class="date-grid-child-all">
-            <EntrySeparator on:drag-drop={e => handleDragDrop("", "empty")} fillSpace={true}/>
+            <EntrySeparator on:drag-drop={() => handleDragDrop("", "empty")} fillSpace={true}/>
         </span>
     {/if}
     {#each Object.keys(datedEntries) as date (date) }
@@ -145,7 +144,7 @@
             <Date bind:data={date} changeable={false}/>
         </span>
         <span class="date-grid-child-second">
-            <EntrySeparator on:drag-drop={e => handleDragDrop(date, "first")} fillSpace={true}/>
+            <EntrySeparator on:drag-drop={() => handleDragDrop(date, "first")} fillSpace={true}/>
         </span>
         <span class="date-grid-child-rest">
             {#each datedEntries[date] as entry (entry.id) }
@@ -156,10 +155,10 @@
                        on:time-change={handleTimeChange}
                        on:text-change={handleGeneralChange}
                        showDate={SHOW_DATE.ICON}/>
-                <EntrySeparator on:drag-drop={e => handleDragDrop(date, entry.id)}/>
+                <EntrySeparator on:drag-drop={() => handleDragDrop(date, entry.id)}/>
             {/each}
             <span class="date-grid-child-last">
-                <EntrySeparator on:drag-drop={e => handleDragDrop(date, "last")} fillSpace={true}/>
+                <EntrySeparator on:drag-drop={() => handleDragDrop(date, "last")} fillSpace={true}/>
             </span>
         </span>
     {/each}

@@ -8,7 +8,6 @@
     const dispatch = createEventDispatcher();
 
     export let entries = [];
-    let dragCounter = 0;
 
     function handleRemoveEntry(event) {
         entries = entries.filter(e => e.id !== event.detail.id);
@@ -23,7 +22,7 @@
         dispatch('date-change', {section: SECTIONS.DAILY, entryId: e.detail.entryId});
     }
 
-    function handleGeneralChange(e) {
+    function handleGeneralChange() {
         dispatch('section-change', {section: SECTIONS.DAILY});
     }
 
@@ -79,7 +78,7 @@
 </style>
 
 <div ondragover="return false">
-    <EntrySeparator on:drag-drop={e => handleDragDrop("first")} fullLine={true}/>
+    <EntrySeparator on:drag-drop={() => handleDragDrop("first")} fullLine={true}/>
     {#each entries as entry (entry.id)}
         <Entry on:remove-entry={handleRemoveEntry}
                on:drag-start={handleDragStart}
@@ -89,6 +88,6 @@
                on:time-change={handleGeneralChange}
                on:text-change={handleGeneralChange}
                showDate={SHOW_DATE.NONE} oneLiner={true}/>
-        <EntrySeparator on:drag-drop={e => handleDragDrop(entry.id)} fullLine={true}/>
+        <EntrySeparator on:drag-drop={() => handleDragDrop(entry.id)} fullLine={true}/>
     {/each}
 </div>
