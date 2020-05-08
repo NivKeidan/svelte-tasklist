@@ -21,6 +21,7 @@
 
 	let dragOrigin = "";
 	let draggedEntryId = 0;
+	let highestId = 0;
 
 	onMount( async () => {
 		await fetch("http://localhost:3333").then(r => r.json()).
@@ -29,7 +30,7 @@
 	});
 
 	function populateSections(data) {
-		data.forEach(e => insertNewEntry(e, false));
+		data.forEach(e => insertEntry(e, false));
 	}
 
 	function saveEntries() {
@@ -87,7 +88,7 @@
 		});
 	}
 
-	function insertEntry(section, entry, saveChanges=true) {
+	function insertEntryToSection(section, entry, saveChanges=true) {
 		let sectionObject = getEntriesObject(section);
 		sectionObject.push(entry);
 		sortSection(section);
@@ -97,7 +98,7 @@
 		});
 	}
 
-	function insertNewEntry(entry, saveChanges=true) {
+	function insertEntry(entry, saveChanges=true) {
 		let section = SECTIONS.FUTURE;
 
 		if (entry.date <= getLastUpcomingDateString())
@@ -112,7 +113,7 @@
 			else
 				entry.time = getNewTime(lastSectionEntry.time);
 		}
-		insertEntry(section, entry, saveChanges);
+		insertEntryToSection(section, entry, saveChanges);
 	}
 
 	function getLastEntry(sectionName) {
@@ -131,14 +132,18 @@
 	}
 
 	function generateNewId() {
-		let highest = 0;
-		const allEntries = getAllEntries();
+		if (highestId === 0) {
+			let highest = 0;
+			const allEntries = getAllEntries();
 
-		allEntries.forEach( e => {
-			if (e.id > highest)
-				highest = e.id;
-		});
-		return highest+1;
+			allEntries.forEach(e => {
+				if (e.id > highest)
+					highest = e.id;
+			});
+			highestId = highest;
+		}
+		highestId = highestId+1
+		return highestId;
 	}
 
 	function getIndexById(arr, id) {
@@ -177,7 +182,7 @@
 	function handleNewEntry(event) {
 		let newEntry = {text: event.detail.text, id: generateNewId(),
 			date: event.detail.date, time: event.detail.time};
-		insertNewEntry(newEntry);
+		insertEntry(newEntry);
 	}
 
 	function handleDateChange(e) {
@@ -185,7 +190,7 @@
 		let originSection = e.detail.section;
 		let entry = getEntryById(originSection, entryId);
 		removeEntryById(originSection, entryId, false);
-		insertNewEntry(entry);
+		insertEntry(entry);
 	}
 
 	function handleDragDrop(e) {
@@ -193,7 +198,7 @@
 		removeEntryById(dragOrigin, draggedEntryId, false);
 		entry.date = e.detail.targetDate;
 		entry.time = e.detail.targetTime;
-		insertNewEntry(entry);
+		insertEntry(entry);
 	}
 
 	function handleDragStart(e) {

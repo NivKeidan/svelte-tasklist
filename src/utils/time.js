@@ -108,6 +108,13 @@ export function getDisplayString(d) {
     return d.slice(0,2) + ":" + d.slice(2);
 }
 
+export function convertToAuto(t) {
+    if (isAutoSetTime(t))
+        return t;
+    else
+        return AutoSetChar+t;
+}
+
 export function getNewTime(prevTime, postTime=AutoTimeMax) {
     let prevTimeValue = getTimeValue(prevTime);
     const difference = parseInt(getTimeValue(postTime)) - parseInt(prevTimeValue);

@@ -1,20 +1,14 @@
 <script>
     import {inputAdded} from './utils/forms';
     import {createEventDispatcher, onMount} from 'svelte';
-    import {isAutoSetTime, getDisplayString} from './utils/time';
+    import {isAutoSetTime, getDisplayString, convertToAuto} from './utils/time';
     import './Time.css';
     import TimeIcon from './IconTime.svelte';
 
     export let data = "";
-    export let show = true;
     let inputValue = "";
     let isEditing = false;
     const dispatch = createEventDispatcher();
-
-    onMount( async () => {
-        if (isAutoSetTime(data))
-            show = false;
-    });
 
     function handleKeyDown(e) {
         if (e.key === 'Escape') {
@@ -38,10 +32,9 @@
         if (inputValue === data) {  // No change
             cancelEdit();
         }
-        else if (inputValue === "")     // hide time
-            show = false;
+        else if (inputValue === "")
+            data = convertToAuto(data)// hide time
         else if (validateInput()) {  // accept input
-            show = true;
             data = inputValue;
         }
         else  // invalid input
@@ -84,7 +77,7 @@
                on:blur={cancelEdit}/>
     </form>
 {:else}
-    {#if show }
+    {#if !isAutoSetTime(data) }
         <span class="time" on:click={handleClick}>{getDisplay()}</span>
     {:else}
         <span on:click={handleClick}><TimeIcon/></span>
