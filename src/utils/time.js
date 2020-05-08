@@ -1,4 +1,4 @@
-import {NullTime} from "./constants";
+import {NullTime, NullTimeMin} from "./constants";
 
 const dateRegexes = [
     "in [0-9]+ day[s]?|in [0-9]+ week[s]?|in [0-9]+ month[s]?|in [0-9]+ year[s]?",
@@ -110,6 +110,9 @@ export function intToTimeString(n) {
     return "" + n;
 }
 
+export function isNullTime(t) {
+    return t >= NullTimeMin;
+}
 function getYearsFromToday(n) {
     let d = new Date();
     d.setFullYear(d.getFullYear() + n);

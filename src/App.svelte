@@ -2,8 +2,8 @@
 	import 'bulma/css/bulma.css';
 
 	import {onMount} from 'svelte';
-	import {getDaysFromToday, getLastUpcomingDateString, intToTimeString} from './utils/time';
-	import { SECTIONS } from './utils/constants';
+	import {getDaysFromToday, getLastUpcomingDateString, intToTimeString, isNullTime} from './utils/time';
+	import { SECTIONS, NullTime, NullTimeGap } from './utils/constants';
 
 	import TodayEntries from './EntriesToday.svelte';
 	import UpcomingEntries from './EntriesUpcoming.svelte';
@@ -103,7 +103,33 @@
 			section = SECTIONS.UPCOMING;
 		if (entry.date <= getDaysFromToday(0))
 			section = SECTIONS.DAILY;
+
+		if (entry.time === undefined || entry.time === null) {
+			entry.time = getCurrentNullTime(section, entry);
+		}
 		insertEntry(section, entry, saveChanges);
+	}
+
+	function getCurrentNullTime(sectionName, entry) {
+		let latestTime;
+		if (sectionName === SECTIONS.DAILY) {
+			const lastEntry = dailyEntries[dailyEntries.length - 1];
+			if (lastEntry == null || !isNullTime(lastEntry.time))
+				return NullTime;
+			latestTime = lastEntry.time;
+		}
+
+		else if (sectionName === SECTIONS.FUTURE || sectionName === SECTIONS.UPCOMING) {
+			const sectionObj = getEntriesObject(sectionName);
+			sectionObj.forEach( e => {
+				if (e.date === entry.date && (latestTime === undefined || e.time > latestTime))
+					latestTime = e.time;
+			})
+			if (latestTime === undefined)
+				return NullTime;
+		}
+
+		return (parseInt(latestTime)+NullTimeGap).toString();
 	}
 
 	function getAllEntries() {

@@ -11,4 +11,7 @@ export const SHOW_DATE = {
     FULL: "Full"
 }
 
-export const NullTime = "9999";
+export const NullTimeMin = "2500";
+export const NullTimeMax = "9999";
+export const NullTime = "6249";
+export const NullTimeGap = "100";

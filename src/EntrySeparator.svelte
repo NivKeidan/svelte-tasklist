@@ -3,7 +3,7 @@
     export let preSeparatorEntryTime;
     export let fullLine = false;
     export let fillSpace = false;
-    import {NullTime} from './utils/constants';
+    import {NullTimeMax} from './utils/constants';
     import { createEventDispatcher } from 'svelte';
 
     const dispatch = createEventDispatcher();
@@ -18,9 +18,7 @@
     }
 
     function getTargetTime() {
-        if (preSeparatorEntryTime === NullTime)
-            return NullTime;
-        return parseInt(preSeparatorEntryTime)+1;
+        return Math.min(parseInt(NullTimeMax), parseInt(preSeparatorEntryTime)+1);
     }
 
     function handleDragDrop(e) {
@@ -39,7 +37,8 @@
         padding-left: 50%;
     }
     .dragged-on {
-        border: green solid 3px;
+        /*border: green solid 3px;*/
+        background-color: lightblue;
     }
     .full-line {
         padding-top: 0.5%;
