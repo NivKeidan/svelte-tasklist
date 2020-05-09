@@ -109,6 +109,10 @@
         dispatch('drag-drop',  {targetDate, targetTime: getNewTime(prevEntryTime, postEntryTime)});
     }
 
+    function handleDateChange(e) {
+        dispatch('date-change', {section: SECTIONS.FUTURE, entryId: e.detail.entryId});
+    }
+
 </script>
 
 <style>
@@ -153,6 +157,7 @@
                        bind:content={entry.text} bind:date={entry.date}
                        bind:time={entry.time} id={entry.id}
                        on:time-change={handleTimeChange}
+                       on:date-change={handleDateChange}
                        on:text-change={handleGeneralChange}
                        showDate={SHOW_DATE.ICON}/>
                 <EntrySeparator on:drag-drop={() => handleDragDrop(date, entry.id)}/>

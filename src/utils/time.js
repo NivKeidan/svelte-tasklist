@@ -3,12 +3,13 @@ const dateRegexes = [
     "today|tdy|tmrw|tomorrow",
     "[1-9][0-9]?[./][1-9][0-2]?([./](2[0-9]{3}|[2-9][0-9]))?",
     "sunday|monday|tuesday|wednesday|thursday|friday|saturday",
+    "[0-9]{8}",
 ]
 
 const AutoSetChar = "A";
-export const AutoTimeMin = AutoSetChar+"0000";
-export const AutoTimeMax = AutoSetChar+"9999";
-export const AutoTimeDefault = AutoSetChar+"5000";
+export const AutoTimeMin = AutoSetChar + "0000";
+export const AutoTimeMax = AutoSetChar + "9999";
+export const AutoTimeDefault = AutoSetChar + "5000";
 export const DATE_REGEX = RegExp("\\b"+combineRegexes(dateRegexes)+"\\b", "gi");
 export const TIME_REGEX = RegExp("\\b[012][0-9][0-5][0-9]\\b", "g");
 
@@ -45,8 +46,14 @@ export function analyzeDateString(dateString) {
             return getDateByNextWeekday(6);
     }
 
-    let regex = RegExp("^in ([0-9]+) (day[s]?|month[s]?|week[s]?|year[s]?)$", "i");
+    let regex = RegExp("^([0-9]{8})$");
     let res = dateString.match(regex);
+    if (res !== null) {
+        return res[1];
+    }
+
+    regex = RegExp("^in ([0-9]+) (day[s]?|month[s]?|week[s]?|year[s]?)$", "i");
+    res = dateString.match(regex);
     if (res !== null) {
         let timeSpan = res[2].toLowerCase();
         if (timeSpan.indexOf("day") !== -1)
@@ -134,6 +141,46 @@ export function convertToAuto(t) {
         return AutoSetChar+t;
 }
 
+export function isAutoSetTime(t) {
+    return t[0] === AutoSetChar;
+}
+
+export function timeCompareFn(a, b) {
+    return getTimeValue(a) - getTimeValue(b);
+}
+
+export function validateFullDateString(dateStr) {
+    const yearPart = parseInt(dateStr.substring(0, 4));
+    const monthPart = parseInt(dateStr.substring(4, 6));
+    const dayPart = parseInt(dateStr.substring(6));
+
+    if (yearPart < 2020 || yearPart > 2999) {
+        console.log("Date Input Error: Year not valid")
+        return false;
+    }
+
+    if (monthPart === 0 || monthPart > 12) {
+        console.log("Date Input Error: Month not valid");
+        return false;
+    }
+
+    if (dayPart === 0 || dayPart > 31) {
+        console.log("Date Input Error: Day not valid");
+        return false;
+    }
+
+    const daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    if (yearPart % 400 === 0 || (yearPart % 100 !== 0 && yearPart % 4 === 0))
+        daysPerMonth[1] = 29;
+
+    if (dayPart > daysPerMonth[monthPart - 1]) {
+        console.log("Date Input Error: This month has only " + daysPerMonth[monthPart - 1] + " days");
+        return false;
+    }
+    return true;
+}
+
 export function getNewTime(prevTime, postTime=AutoTimeMax) {
     let prevTimeValue = getTimeValue(prevTime);
     const difference = parseInt(getTimeValue(postTime)) - parseInt(prevTimeValue);
@@ -216,14 +263,6 @@ function dateByDayMonthYear(day, month, year) {
     year < 100 ? fullYear = 2000 + year : fullYear = year;
     d.setFullYear(fullYear);
     return dateToString(d);
-}
-
-export function isAutoSetTime(t) {
-    return t[0] === AutoSetChar;
-}
-
-export function timeCompareFn(a, b) {
-    return getTimeValue(a) - getTimeValue(b);
 }
 
 function getTimeValue(t) {

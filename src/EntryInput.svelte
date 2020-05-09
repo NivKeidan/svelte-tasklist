@@ -58,12 +58,18 @@
     }
 
     function handleDateClick(i) {
-        selectedDateIndex = i;
+        if (selectedDateIndex === i)
+            selectedDateIndex = null;
+        else
+            selectedDateIndex = i;
         inputElement.focus();
     }
 
     function handleTimeClick(i) {
-        selectedTimeIndex = i;
+        if (selectedTimeIndex === i)
+            selectedTimeIndex = null;
+        else
+            selectedTimeIndex = i;
         inputElement.focus();
     }
 

@@ -1,8 +1,5 @@
-add ability to unclick date/or time if clicking on a selected one
-make sure regex of 4 digit year is not selected as time
-add date string editing to accept regexes
+separate time.js
 
-make date editing of existing entry to accept all sorts of expressions + add full date string as part of regex
 replace all console.log errors to show them properly
 add saved (or online/offline) indication
 integrate offline usage (cookies?)

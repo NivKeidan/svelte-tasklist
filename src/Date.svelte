@@ -2,7 +2,7 @@
     import {inputAdded} from './utils/forms';
     import {SHOW_DATE} from './utils/constants';
     import { createEventDispatcher } from 'svelte';
-    import { getDayName, breakApart } from './utils/time';
+    import { getDayName, breakApart, analyzeDateString, validateFullDateString } from './utils/time';
     import './Date.css';
     import DateIcon from './IconDate.svelte';
 
@@ -33,37 +33,17 @@
     function handleSubmit() {
         if (data === inputValue) {
             cancelEdit();
-            return
+            return;
         }
-        if (validateInput()) {
-            data = inputValue;
-            isEditing = false;
-            dispatch('date-change', {newDate: inputValue});
-        }
-    }
-
-    function validateInput() {
-        const regex = RegExp("^[0-9]{8}$");
-
-        if (!regex.test(inputValue)) {
-            console.log("Date Input Error: Use 8 digits in format YYYYMMDD");
-            return false;
+        let date = analyzeDateString(inputValue);
+        if (date === "" || !validateFullDateString(date)) {
+            console.log("Invalid Date Input")
+            return;
         }
 
-        const monthPart = parseInt(inputValue.substring(4,6));
-        const dayPart = parseInt(inputValue.substring(6));
-
-        if (monthPart === 0 || monthPart > 12) {
-            console.log("Date Input Error: Month not valid");
-            return false;
-        }
-
-        if (dayPart === 0 || dayPart > 31) {
-            console.log("Date Input Error: Day not valid");
-            return false;
-        }
-
-        return true;
+        data = date;
+        isEditing = false;
+        dispatch('date-change', {newDate: inputValue});
     }
 
     function getDisplayDate() {
@@ -80,7 +60,7 @@
 
 {#if isEditing}
     <form on:submit|preventDefault={handleSubmit} class="edit-date-form">
-        <input maxlength="8" class="edit-date-input" use:inputAdded bind:value={inputValue} on:keydown={handleKeyDown}
+        <input class="edit-date-input" use:inputAdded bind:value={inputValue} on:keydown={handleKeyDown}
             on:blur={cancelEdit}/>
     </form>
 {:else}
