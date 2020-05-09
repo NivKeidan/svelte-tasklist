@@ -38,7 +38,7 @@
         }
         let date = dateUtils.analyzeDateString(inputValue);
         if (date === "") {
-            errors.add("Date input is not recognized");
+            errors.addError("Date input is not recognized");
             return
         }
         else if (!dateUtils.validateFullDateString(date)) {

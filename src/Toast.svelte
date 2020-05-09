@@ -22,11 +22,14 @@
         background: rgba(0, 0, 0, 0.7);
         color: #fff;
     }
+    .toast-err {
+        background-color: red;
+    }
 </style>
 
 <div class="toast-wrapper">
     {#each $errors as toast (toast.id)}
-        <div class="toast-item" in:fly="{{delay: 0, duration: 300, x: 0, y: 50, opacity: 0.1, easing: backOut}}" out:fade={{duration:500, opacity: 0}}>
+        <div class:toast-err={toast.error} class="toast-item" in:fly="{{delay: 0, duration: 300, x: 0, y: 50, opacity: 0.1, easing: backOut}}" out:fade={{duration:500, opacity: 0}}>
             {toast.msg}
         </div>
     {/each}

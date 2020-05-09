@@ -2,14 +2,19 @@ import { writable } from 'svelte/store';
 
 let lastId = 0;
 const removeErrorTimeout = 1000;
+const removeMsgTimeout = 1000;
 function createErrorsStore() {
     const { subscribe, set, update } = writable([]);
 
     return {
         subscribe,
-        add: (errMsg) => update(errs => {
-            removeError();
-            return [...errs, {id: ++lastId, msg: errMsg}];
+        addError: (errMsg) => update(errs => {
+            removeError(removeErrorTimeout);
+            return [...errs, {id: ++lastId, msg: errMsg, error: true}];
+        }),
+        addMsg: (errMsg) => update(errs => {
+            removeError(removeMsgTimeout);
+            return [...errs, {id: ++lastId, msg: errMsg, error: false}];
         }),
         remove: () => update( errs => errs.filter((a, i) => i > 0))
     };
@@ -17,6 +22,6 @@ function createErrorsStore() {
 
 export const errors = createErrorsStore();
 
-function removeError() {
-    setTimeout(errors.remove, removeErrorTimeout);
+function removeError(timeout) {
+    setTimeout(errors.remove, timeout);
 }

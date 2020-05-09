@@ -48,7 +48,7 @@
         const regex = RegExp("^[012][0-9][0-5][0-9]$");
 
         if (!regex.test(inputValue)) {
-            errors.add("Time Input Error");
+            errors.addError("Time Input Error");
             return false;
         }
 
@@ -56,12 +56,12 @@
         const minutesPart = parseInt(inputValue.substring(2));
 
         if (hourPart > 23) {
-            errors.add("Time Input Error: Hour not valid");
+            errors.addError("Time Input Error: Hour not valid");
             return false;
         }
 
         if (minutesPart > 59) {
-            errors.add("Time Input Error: Minutes not valid");
+            errors.addError("Time Input Error: Minutes not valid");
             return false;
         }
         return true;
