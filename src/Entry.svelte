@@ -9,6 +9,7 @@
     import {getDaysFromToday} from './utils/date';
     import {SHOW_DATE} from './utils/constants';
     import './Entry.css';
+    import { fly } from 'svelte/transition';
 
     const dispatch = createEventDispatcher();
     export let content = "This entry has no content wtf?!?!";
@@ -68,8 +69,7 @@
     }
 
 </script>
-
-<span class="entry" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
+<span in:fly="{{x: -100, y: 0, duration: 750}}" out:fly|local="{{x: 100, y: 0, duration: 750}}" class="entry" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
     <Date bind:data={date} show={showDate} on:date-change={handleDateChanged}/>
     <Time bind:data={time} on:time-change/>
     <span class="entry-text">

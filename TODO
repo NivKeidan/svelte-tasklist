@@ -1,9 +1,6 @@
-find server to use
-WE ARE BASICALLY DONE HERE!
 convert/maintain android app
 consider switching to save API to be only new change?
 consider getting new IDs from the server? (or just max id, or something)
 add undo for actions
-consider adding animations - for fun or practice
 add vocal insertion of new entries
 clicking c opens calendar view (to see dates and stuff)
