@@ -2,7 +2,7 @@
 	import 'bulma/css/bulma.css';
 
 	import {onMount} from 'svelte';
-	import {getDaysFromToday, getLastUpcomingDateString} from './utils/time';
+	import {getDaysFromToday, getLastUpcomingDateString} from './utils/date';
 	import {timeCompareFn, AutoTimeDefault, getNewTime} from './utils/time';
 	import { SECTIONS } from './utils/constants';
 

@@ -3,7 +3,8 @@
     import Entry from './Entry.svelte';
     import EntrySeparator from './EntrySeparator.svelte';
     import {SECTIONS, SHOW_DATE} from './utils/constants';
-    import {AutoTimeMin, AutoTimeMax, getNewTime, getDaysFromToday} from './utils/time';
+    import {AutoTimeMin, AutoTimeMax, getNewTime} from './utils/time';
+    import {getDaysFromToday} from './utils/date';
 
     const dispatch = createEventDispatcher();
 

@@ -1,7 +1,7 @@
 <script>
     import {inputAdded} from './utils/forms';
     import {createEventDispatcher} from 'svelte';
-    import {isAutoSetTime, getDisplayString, convertToAuto} from './utils/time';
+    import * as timeUtils from './utils/time';
     import './Time.css';
     import TimeIcon from './IconTime.svelte';
 
@@ -17,7 +17,7 @@
     }
 
     function handleClick() {
-        if (isAutoSetTime(data))
+        if (timeUtils.isAutoSetTime(data))
             inputValue = "0000";
         else
             inputValue = data;
@@ -33,7 +33,7 @@
             cancelEdit();
         }
         else if (inputValue === "")
-            data = convertToAuto(data)// hide time
+            data = timeUtils.convertToAuto(data)// hide time
         else if (validateInput()) {  // accept input
             data = inputValue;
         }
@@ -67,7 +67,7 @@
     }
 
     function getDisplay() {
-        return getDisplayString(data);
+        return timeUtils.getDisplayString(data);
     }
 </script>
 
@@ -77,7 +77,7 @@
                on:blur={cancelEdit}/>
     </form>
 {:else}
-    {#if !isAutoSetTime(data) }
+    {#if !timeUtils.isAutoSetTime(data) }
         <span class="time" on:click={handleClick}>{getDisplay()}</span>
     {:else}
         <span on:click={handleClick}><TimeIcon/></span>

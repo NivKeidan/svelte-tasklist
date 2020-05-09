@@ -5,7 +5,8 @@
     import Fa from 'svelte-fa';
     import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
     import {inputAdded} from './utils/forms';
-    import {getDaysFromToday, AutoTimeDefault} from './utils/time';
+    import {AutoTimeDefault} from './utils/time';
+    import {getDaysFromToday} from './utils/date';
     import {SHOW_DATE} from './utils/constants';
     import './Entry.css';
 

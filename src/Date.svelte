@@ -2,7 +2,7 @@
     import {inputAdded} from './utils/forms';
     import {SHOW_DATE} from './utils/constants';
     import { createEventDispatcher } from 'svelte';
-    import { getDayName, breakApart, analyzeDateString, validateFullDateString } from './utils/time';
+    import * as dateUtils from './utils/date';
     import './Date.css';
     import DateIcon from './IconDate.svelte';
 
@@ -35,8 +35,8 @@
             cancelEdit();
             return;
         }
-        let date = analyzeDateString(inputValue);
-        if (date === "" || !validateFullDateString(date)) {
+        let date = dateUtils.analyzeDateString(inputValue);
+        if (date === "" || !dateUtils.validateFullDateString(date)) {
             console.log("Invalid Date Input")
             return;
         }
@@ -44,16 +44,6 @@
         data = date;
         isEditing = false;
         dispatch('date-change', {newDate: inputValue});
-    }
-
-    function getDisplayDate() {
-        let dateParts = breakApart(data);
-        let currentYear =  new Date().getFullYear();
-        let finalString =  dateParts.day + "." + dateParts.month;
-        if (parseInt(dateParts.year) !== currentYear) {
-            finalString = finalString + "." + dateParts.year.substring(2);
-        }
-        return finalString;
     }
 
 </script>
@@ -66,9 +56,9 @@
 {:else}
     <span class="date" on:click={handleClick}>
         {#if show === SHOW_DATE.FULL}
-            {getDisplayDate()}
+            {dateUtils.getDisplayDate(data)}
         {:else if show === SHOW_DATE.DAY}
-            {getDayName(data)}
+            {dateUtils.getDayName(data)}
         {:else if show === SHOW_DATE.ICON}
             <DateIcon/>
         {/if}

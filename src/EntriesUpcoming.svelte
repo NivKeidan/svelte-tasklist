@@ -1,6 +1,6 @@
 <script>
     import {createEventDispatcher} from 'svelte';
-    import {getDaysFromToday} from './utils/time';
+    import {getDaysFromToday} from './utils/date';
     import {timeCompareFn, AutoTimeMin, AutoTimeMax, getNewTime} from './utils/time';
     import Entry from './Entry.svelte';
     import Date from './Date.svelte';

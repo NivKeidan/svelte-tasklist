@@ -1,6 +1,7 @@
 <script>
     import { createEventDispatcher, afterUpdate } from 'svelte';
-    import { analyzeDateString, analyzeTimeString, DATE_REGEX, TIME_REGEX } from './utils/time';
+    import { analyzeTimeString, TIME_REGEX } from './utils/time';
+    import { analyzeDateString, DATE_REGEX } from './utils/date';
     import './EntryInput.css';
 
     const dispatch = createEventDispatcher();
