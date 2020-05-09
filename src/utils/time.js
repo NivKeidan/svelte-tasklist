@@ -1,20 +1,14 @@
-
-
 const AutoSetChar = "A";
 export const AutoTimeMin = AutoSetChar + "0000";
 export const AutoTimeMax = AutoSetChar + "9999";
 export const AutoTimeDefault = AutoSetChar + "5000";
 export const TIME_REGEX = RegExp("\\b[012][0-9][0-5][0-9]\\b", "g");
 
-
-
 export function analyzeTimeString(timeString) {
     if (timeString !== "")
         return timeString;
     return AutoTimeDefault;
 }
-
-
 
 export function convertToAuto(t) {
     if (isAutoSetTime(t))
@@ -30,7 +24,6 @@ export function isAutoSetTime(t) {
 export function timeCompareFn(a, b) {
     return getTimeValue(a) - getTimeValue(b);
 }
-
 
 export function getNewTime(prevTime, postTime=AutoTimeMax) {
     let prevTimeValue = getTimeValue(prevTime);

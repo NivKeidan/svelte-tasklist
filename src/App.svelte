@@ -2,6 +2,7 @@
 	import 'bulma/css/bulma.css';
 
 	import {onMount} from 'svelte';
+	import { errors } from './stores.js';
 	import {getDaysFromToday, getLastUpcomingDateString} from './utils/date';
 	import {timeCompareFn, AutoTimeDefault, getNewTime} from './utils/time';
 	import { SECTIONS } from './utils/constants';
@@ -12,6 +13,7 @@
 	import EntryInput from './EntryInput.svelte';
 	import Header from './Header.svelte';
 	import SectionSeaprator from './SectionSeaprator.svelte';
+	import ErrorPresentor from './ErrorPresentor.svelte';
 
 	import './App.css';
 
@@ -26,7 +28,7 @@
 	onMount( async () => {
 		await fetch("http://localhost:3333").then(r => r.json()).
 		then(data => populateSections(data)).
-		catch( e => console.log("failed getting data", e));
+		catch( e => errors.add("failed getting data", e));
 	});
 
 	function populateSections(data) {
@@ -40,8 +42,10 @@
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify(allEntries),
 		}).
-		then(() => console.log("saved success")).
-		catch(err => console.log("save failed", err));
+		then(() => {
+			console.log("saved success");
+		}).
+		catch(err => errors.add("save failed: ", err));
 	}
 
 	// ---------- Utils -------------
@@ -55,7 +59,7 @@
 			case SECTIONS.FUTURE:
 				return futureEntries;
 			default:
-				console.log("could not get entries object from input: ", section);
+				errors.add("could not get entries object from input: ", section);
 				return null;
 		}
 	}
@@ -73,7 +77,7 @@
 				futureEntries = futureEntries;
 				break;
 			default:
-				console.log("could not get entries object from input: ", section);
+				errors.add("could not get entries object from input: ", section);
 				return null;
 		}
 	}
@@ -208,6 +212,7 @@
 
 </script>
 <div class="app">
+	<ErrorPresentor/>
 	<Header/>
 	<EntryInput on:new-entry={handleNewEntry}/>
 

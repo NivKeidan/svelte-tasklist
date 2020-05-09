@@ -1,6 +1,7 @@
 <script>
     import {inputAdded} from './utils/forms';
     import {SHOW_DATE} from './utils/constants';
+    import { errors } from './stores.js';
     import { createEventDispatcher } from 'svelte';
     import * as dateUtils from './utils/date';
     import './Date.css';
@@ -37,7 +38,7 @@
         }
         let date = dateUtils.analyzeDateString(inputValue);
         if (date === "" || !dateUtils.validateFullDateString(date)) {
-            console.log("Invalid Date Input")
+            errors.add("Invalid Date Input")
             return;
         }
 

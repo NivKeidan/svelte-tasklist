@@ -1,4 +1,4 @@
-import {isAutoSetTime} from "./time";
+import { errors } from '../stores.js';
 
 const dateRegexes = [
     "in [0-9]+ day[s]?|in [0-9]+ week[s]?|in [0-9]+ month[s]?|in [0-9]+ year[s]?",
@@ -7,7 +7,6 @@ const dateRegexes = [
     "sunday|monday|tuesday|wednesday|thursday|friday|saturday",
     "[0-9]{8}",
 ]
-
 export const DATE_REGEX = RegExp("\\b"+combineRegexes(dateRegexes)+"\\b", "gi");
 
 export function getDaysFromToday(n) {
@@ -69,9 +68,9 @@ export function analyzeDateString(dateString) {
         let day = parseInt(res[1]);
         let month = parseInt(res[2]);
         if (day < 1 || day > 31)
-            console.log("invalid day: " + res[1]);
+            errors.add("invalid day: " + res[1]);
         else if (month < 1 || month > 12)
-            console.log("invalid month: " + res[2]);
+            errors.add("invalid month: " + res[2]);
         else
             return dateByDayMonth(day, month);
     }
@@ -82,15 +81,14 @@ export function analyzeDateString(dateString) {
         let day = parseInt(res[1]);
         let month = parseInt(res[2]);
         let year = parseInt(res[3]);
-        console.log(year);
         if (day < 1 || day > 31)
-            console.log("invalid day: " + res[1]);
+            errors.add("invalid day: " + res[1]);
         else if (month < 1 || month > 12)
-            console.log("invalid month: " + res[2]);
+            errors.add("invalid month: " + res[2]);
         else if (year < 100 && year + 2000 < 2020)  // 2 digits
-            console.log("invalid year: " + res[3]);
+            errors.add("invalid year: " + res[3]);
         else if (year > 999 && year < 2020)
-            console.log("invalid year: " + res[3]);
+            errors.add("invalid year: " + res[3]);
         else
             return dateByDayMonthYear(day, month, year);
     }
@@ -104,17 +102,17 @@ export function validateFullDateString(dateStr) {
     const dayPart = parseInt(dateStr.substring(6));
 
     if (yearPart < 2020 || yearPart > 2999) {
-        console.log("Date Input Error: Year not valid")
+        errors.add("Date Input Error: Year not valid")
         return false;
     }
 
     if (monthPart === 0 || monthPart > 12) {
-        console.log("Date Input Error: Month not valid");
+        errors.add("Date Input Error: Month not valid");
         return false;
     }
 
     if (dayPart === 0 || dayPart > 31) {
-        console.log("Date Input Error: Day not valid");
+        errors.add("Date Input Error: Day not valid");
         return false;
     }
 
@@ -124,7 +122,7 @@ export function validateFullDateString(dateStr) {
         daysPerMonth[1] = 29;
 
     if (dayPart > daysPerMonth[monthPart - 1]) {
-        console.log("Date Input Error: This month has only " + daysPerMonth[monthPart - 1] + " days");
+        errors.add("Date Input Error: This month has only " + daysPerMonth[monthPart - 1] + " days");
         return false;
     }
     return true;

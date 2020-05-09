@@ -1,4 +1,3 @@
-replace all console.log errors to show them properly
 add saved (or online/offline) indication
 integrate offline usage (cookies?)
 find server to use
