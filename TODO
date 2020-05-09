@@ -1,6 +1,3 @@
-when in offline mode - add try to reconnect constantly
-add handling of failure to save, consider multiple save requests
-integrate offline usage (cookies?)
 find server to use
 WE ARE BASICALLY DONE HERE!
 convert/maintain android app

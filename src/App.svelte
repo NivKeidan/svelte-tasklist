@@ -1,8 +1,6 @@
 <script>
-	import 'bulma/css/bulma.css';
-
 	import {onMount} from 'svelte';
-	import { errors } from './stores.js';
+	import { userMessages } from './stores.js';
 	import {getDaysFromToday, getLastUpcomingDateString} from './utils/date';
 	import {timeCompareFn, AutoTimeDefault, getNewTime} from './utils/time';
 	import { SECTIONS } from './utils/constants';
@@ -18,6 +16,8 @@
 
 	import './App.css';
 
+	const delayBetweenServerReachAttempts = 1000;
+
 	let dailyEntries = [];
 	let weeklyEntries = [];
 	let futureEntries = [];
@@ -25,17 +25,38 @@
 	let dragOrigin = "";
 	let draggedEntryId = 0;
 	let highestId = 0;
-
 	let offline = true;
+	let afterInitialLoad = false;
 
 	onMount( async () => {
-		await fetch("http://localhost:3333").then(r => r.json()).
-		then(data => {
-			offline = false;
-			populateSections(data);
-		}).
-		catch( e => errors.addError("failed getting data", e));
+		loadDataFromServer();
 	});
+
+	$: if (offline && afterInitialLoad) {
+		checkServerIsReachable();
+	}
+
+	function loadDataFromServer() {
+		fetch("http://localhost:3333").then(r => r.json()).then(data => {
+			populateSections(data);
+			offline = false;
+			afterInitialLoad = true;
+		}).catch(e => {
+			userMessages.addError("failed loading data", e);
+			setTimeout(loadDataFromServer, delayBetweenServerReachAttempts);
+		});
+	}
+
+	function checkServerIsReachable() {
+		fetch("http://localhost:3333").then(r => {
+			if (r.ok) {
+				userMessages.addMsg("Server Connection Established!");
+				offline = false;
+				saveEntries();
+			} else
+				setTimeout(checkServerIsReachable, delayBetweenServerReachAttempts);
+		}).catch(() => setTimeout(checkServerIsReachable, delayBetweenServerReachAttempts))
+	}
 
 	function populateSections(data) {
 		data.forEach(e => insertEntry(e, false));
@@ -48,10 +69,10 @@
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify(allEntries),
 		}).
-		then(() => errors.addMsg("Saved!")).
+		then(() => userMessages.addMsg("Saved!")).
 		catch(err => {
 			offline = true;
-			errors.addError("save failed: ", err);
+			userMessages.addError("save failed: ", err);
 		});
 	}
 
@@ -66,7 +87,7 @@
 			case SECTIONS.FUTURE:
 				return futureEntries;
 			default:
-				errors.addError("could not get entries object from input: ", section);
+				userMessages.addError("could not get entries object from input: ", section);
 				return null;
 		}
 	}
@@ -84,7 +105,7 @@
 				futureEntries = futureEntries;
 				break;
 			default:
-				errors.addError("could not get entries object from input: ", section);
+				userMessages.addError("could not get entries object from input: ", section);
 				return null;
 		}
 	}
@@ -222,30 +243,34 @@
 	<AppStatus bind:offline={offline}/>
 	<Toast/>
 	<Header/>
-	<EntryInput on:new-entry={handleNewEntry}/>
+	{#if !afterInitialLoad}
+		Server is unreachable!!
+	{:else}
+		<EntryInput on:new-entry={handleNewEntry}/>
 
-	<TodayEntries bind:entries={dailyEntries}
-				   on:section-change={handleSectionChanged}
-				   on:date-change={handleDateChange}
-				   on:drag-start={handleDragStart}
-				  on:drag-drop={handleDragDrop}
-	/>
-
-	<SectionSeaprator/>
-
-	<UpcomingEntries bind:entries={weeklyEntries}
-				   on:section-change={handleSectionChanged}
-				   on:date-change={handleDateChange}
-				   on:drag-start={handleDragStart}
-				   on:drag-drop={handleDragDrop}
-	/>
-
-	<SectionSeaprator/>
-
-	<FutureEntries bind:entries={futureEntries}
-					  on:section-change={handleSectionChanged}
-					  on:date-change={handleDateChange}
-					  on:drag-start={handleDragStart}
+		<TodayEntries bind:entries={dailyEntries}
+					   on:section-change={handleSectionChanged}
+					   on:date-change={handleDateChange}
+					   on:drag-start={handleDragStart}
 					  on:drag-drop={handleDragDrop}
-	/>
+		/>
+
+		<SectionSeaprator/>
+
+		<UpcomingEntries bind:entries={weeklyEntries}
+					   on:section-change={handleSectionChanged}
+					   on:date-change={handleDateChange}
+					   on:drag-start={handleDragStart}
+					   on:drag-drop={handleDragDrop}
+		/>
+
+		<SectionSeaprator/>
+
+		<FutureEntries bind:entries={futureEntries}
+						  on:section-change={handleSectionChanged}
+						  on:date-change={handleDateChange}
+						  on:drag-start={handleDragStart}
+						  on:drag-drop={handleDragDrop}
+		/>
+	{/if}
 </div>

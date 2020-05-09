@@ -3,25 +3,25 @@ import { writable } from 'svelte/store';
 let lastId = 0;
 const removeErrorTimeout = 1000;
 const removeMsgTimeout = 1000;
-function createErrorsStore() {
+function createUserMessagesStore() {
     const { subscribe, set, update } = writable([]);
 
     return {
         subscribe,
-        addError: (errMsg) => update(errs => {
+        addError: (errMsg) => update(messages => {
             removeError(removeErrorTimeout);
-            return [...errs, {id: ++lastId, msg: errMsg, error: true}];
+            return [...messages, {id: ++lastId, msg: errMsg, error: true}];
         }),
-        addMsg: (errMsg) => update(errs => {
+        addMsg: (msg) => update(messages => {
             removeError(removeMsgTimeout);
-            return [...errs, {id: ++lastId, msg: errMsg, error: false}];
+            return [...messages, {id: ++lastId, msg: msg, error: false}];
         }),
-        remove: () => update( errs => errs.filter((a, i) => i > 0))
+        remove: () => update( messages => messages.filter((a, i) => i > 0))
     };
 }
 
-export const errors = createErrorsStore();
+export const userMessages = createUserMessagesStore();
 
 function removeError(timeout) {
-    setTimeout(errors.remove, timeout);
+    setTimeout(userMessages.remove, timeout);
 }

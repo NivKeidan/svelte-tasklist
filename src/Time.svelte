@@ -1,6 +1,6 @@
 <script>
     import {inputAdded} from './utils/forms';
-    import { errors } from './stores.js';
+    import { userMessages } from './stores.js';
     import {createEventDispatcher} from 'svelte';
     import * as timeUtils from './utils/time';
     import './Time.css';
@@ -48,7 +48,7 @@
         const regex = RegExp("^[012][0-9][0-5][0-9]$");
 
         if (!regex.test(inputValue)) {
-            errors.addError("Time Input Error");
+            userMessages.addError("Time Input Error");
             return false;
         }
 
@@ -56,12 +56,12 @@
         const minutesPart = parseInt(inputValue.substring(2));
 
         if (hourPart > 23) {
-            errors.addError("Time Input Error: Hour not valid");
+            userMessages.addError("Time Input Error: Hour not valid");
             return false;
         }
 
         if (minutesPart > 59) {
-            errors.addError("Time Input Error: Minutes not valid");
+            userMessages.addError("Time Input Error: Minutes not valid");
             return false;
         }
         return true;

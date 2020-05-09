@@ -1,7 +1,7 @@
 <script>
     import { fade, fly } from 'svelte/transition';
     import { backOut } from 'svelte/easing';
-    import { errors } from './stores';
+    import { userMessages } from './stores';
 
 </script>
 
@@ -28,7 +28,7 @@
 </style>
 
 <div class="toast-wrapper">
-    {#each $errors as toast (toast.id)}
+    {#each $userMessages as toast (toast.id)}
         <div class:toast-err={toast.error} class="toast-item" in:fly="{{delay: 0, duration: 300, x: 0, y: 50, opacity: 0.1, easing: backOut}}" out:fade={{duration:500, opacity: 0}}>
             {toast.msg}
         </div>

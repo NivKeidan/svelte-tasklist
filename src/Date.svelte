@@ -1,7 +1,7 @@
 <script>
     import {inputAdded} from './utils/forms';
     import {SHOW_DATE} from './utils/constants';
-    import { errors } from './stores.js';
+    import { userMessages } from './stores.js';
     import { createEventDispatcher } from 'svelte';
     import * as dateUtils from './utils/date';
     import './Date.css';
@@ -38,7 +38,7 @@
         }
         let date = dateUtils.analyzeDateString(inputValue);
         if (date === "") {
-            errors.addError("Date input is not recognized");
+            userMessages.addError("Date input is not recognized");
             return
         }
         else if (!dateUtils.validateFullDateString(date)) {
