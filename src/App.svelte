@@ -13,7 +13,7 @@
 	import EntryInput from './EntryInput.svelte';
 	import Header from './Header.svelte';
 	import SectionSeaprator from './SectionSeaprator.svelte';
-	import ErrorPresentor from './ErrorPresentor.svelte';
+	import Toast from './Toast.svelte';
 
 	import './App.css';
 
@@ -212,7 +212,7 @@
 
 </script>
 <div class="app">
-	<ErrorPresentor/>
+	<Toast/>
 	<Header/>
 	<EntryInput on:new-entry={handleNewEntry}/>
 

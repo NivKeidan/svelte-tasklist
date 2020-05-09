@@ -1,4 +1,4 @@
-import { errors } from '../stores.js';
+import { errors, errorStore } from '../stores.js';
 
 const dateRegexes = [
     "in [0-9]+ day[s]?|in [0-9]+ week[s]?|in [0-9]+ month[s]?|in [0-9]+ year[s]?",
@@ -68,9 +68,9 @@ export function analyzeDateString(dateString) {
         let day = parseInt(res[1]);
         let month = parseInt(res[2]);
         if (day < 1 || day > 31)
-            errors.add("invalid day: " + res[1]);
+            errors.add("Invalid day: " + res[1]);
         else if (month < 1 || month > 12)
-            errors.add("invalid month: " + res[2]);
+            errors.add("Invalid month: " + res[2]);
         else
             return dateByDayMonth(day, month);
     }
@@ -82,13 +82,13 @@ export function analyzeDateString(dateString) {
         let month = parseInt(res[2]);
         let year = parseInt(res[3]);
         if (day < 1 || day > 31)
-            errors.add("invalid day: " + res[1]);
+            errors.add("Invalid day: " + res[1]);
         else if (month < 1 || month > 12)
-            errors.add("invalid month: " + res[2]);
+            errors.add("Invalid month: " + res[2]);
         else if (year < 100 && year + 2000 < 2020)  // 2 digits
-            errors.add("invalid year: " + res[3]);
+            errors.add("Invalid year: " + res[3]);
         else if (year > 999 && year < 2020)
-            errors.add("invalid year: " + res[3]);
+            errors.add("Invalid year: " + res[3]);
         else
             return dateByDayMonthYear(day, month, year);
     }
