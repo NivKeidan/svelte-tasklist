@@ -1,6 +1,5 @@
-convert/maintain android app
-consider switching to save API to be only new change?
-consider getting new IDs from the server? (or just max id, or something)
+check periodically if update is required since date has changed since last opening the app
+convert usage to git instead of running server
 add undo for actions
 add vocal insertion of new entries
 clicking c opens calendar view (to see dates and stuff)

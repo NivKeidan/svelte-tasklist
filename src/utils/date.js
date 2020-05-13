@@ -128,12 +128,6 @@ export function validateFullDateString(dateStr) {
     return true;
 }
 
-export function getLastUpcomingDateString() {
-    let d = new Date();
-    d.setDate(d.getDate() + 7);
-    return dateToString(d);
-}
-
 export function getDayName(dateString) {
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let d = stringToDate(dateString);

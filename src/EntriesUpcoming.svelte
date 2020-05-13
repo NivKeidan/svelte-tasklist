@@ -121,6 +121,7 @@
     .upcoming-row {
         display: grid;
         grid-template-columns: 6% 4% auto auto;
+        margin-bottom: 2%;
     }
     .no-entries {
         grid-template-columns: 6% auto auto;
@@ -160,9 +161,9 @@
                            showDate={SHOW_DATE.NONE}/>
                     <EntrySeparator on:drag-drop={() => handleDragDrop(date, entry.id)}/>
                 {/each}
-                <span class="date-grid-child-last">
-                    <EntrySeparator on:drag-drop={() => handleDragDrop(date, "last")} fillSpace={true}/>
-                </span>
+            </span>
+            <span class="date-grid-child-last">
+                <EntrySeparator on:drag-drop={() => handleDragDrop(date, "last")} fillSpace={true}/>
             </span>
         </div>
     {/each}

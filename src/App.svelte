@@ -1,7 +1,7 @@
 <script>
 	import {onMount} from 'svelte';
 	import { userMessages } from './stores.js';
-	import {getDaysFromToday, getLastUpcomingDateString} from './utils/date';
+	import {getDaysFromToday} from './utils/date';
 	import {timeCompareFn, AutoTimeDefault, getNewTime} from './utils/time';
 	import { SECTIONS } from './utils/constants';
 
@@ -133,7 +133,7 @@
 	function insertEntry(entry, saveChanges=true) {
 		let section = SECTIONS.FUTURE;
 
-		if (entry.date <= getLastUpcomingDateString())
+		if (entry.date <= getDaysFromToday(7))
 			section = SECTIONS.UPCOMING;
 		if (entry.date <= getDaysFromToday(0))
 			section = SECTIONS.DAILY;

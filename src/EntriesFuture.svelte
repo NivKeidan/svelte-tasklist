@@ -120,6 +120,7 @@
     .entries-future {
         display: grid;
         grid-template-columns: 5% 4% auto auto;
+        row-gap: 20px;
     }
     .date-grid-child-first {
         grid-column: 1;
@@ -163,9 +164,9 @@
                        showDate={SHOW_DATE.ICON}/>
                 <EntrySeparator on:drag-drop={() => handleDragDrop(date, entry.id)}/>
             {/each}
-            <span class="date-grid-child-last">
-                <EntrySeparator on:drag-drop={() => handleDragDrop(date, "last")} fillSpace={true}/>
-            </span>
+        </span>
+        <span class="date-grid-child-last">
+            <EntrySeparator on:drag-drop={() => handleDragDrop(date, "last")} fillSpace={true}/>
         </span>
     {/each}
 </div>

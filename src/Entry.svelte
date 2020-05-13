@@ -69,7 +69,8 @@
     }
 
 </script>
-<span in:fly="{{x: -100, y: 0, duration: 750}}" out:fly|local="{{x: 100, y: 0, duration: 750}}" class="entry" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
+<span in:fly="{{x: -100, y: 0, duration: 750}}" out:fly|local="{{x: 100, y: 0, duration: 750}}"
+      class="entry-general" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
     <Date bind:data={date} show={showDate} on:date-change={handleDateChanged}/>
     <Time bind:data={time} on:time-change/>
     <span class="entry-text">
