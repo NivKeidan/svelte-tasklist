@@ -1,9 +1,6 @@
+trim from new text / text editing
 check periodically if update is required since date has changed since last opening the app
+find solution for server + make app read only
 add dragging ability to upcoming day name and make sure "last" fills up entire line
 add floating items? no time no date can be moved around and dragged into places to become regular entries
-convert usage to git instead of running server?
-
 add undo for actions
-add vocal insertion of new entries
-clicking c opens calendar view (to see dates and stuff)
-convert app to only viewing
