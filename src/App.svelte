@@ -3,11 +3,12 @@
 	import { userMessages } from './stores.js';
 	import {getDaysFromToday} from './utils/date';
 	import {timeCompareFn, AutoTimeDefault, getNewTime} from './utils/time';
-	import { SECTIONS } from './utils/constants';
+	import { SECTIONS, NO_DATE } from './utils/constants';
 
 	import TodayEntries from './EntriesToday.svelte';
 	import UpcomingEntries from './EntriesUpcoming.svelte';
 	import FutureEntries from './EntriesFuture.svelte';
+	import GeneralEntries from './EntriesGeneral.svelte';
 	import EntryInput from './EntryInput.svelte';
 	import Header from './Header.svelte';
 	import SectionSeaprator from './SectionSeaprator.svelte';
@@ -17,10 +18,10 @@
 	import './App.css';
 
 	const delayBetweenServerReachAttempts = 1000;
-
 	let dailyEntries = [];
 	let weeklyEntries = [];
 	let futureEntries = [];
+	let generalEntries = [];
 
 	let dragOrigin = "";
 	let draggedEntryId = 0;
@@ -86,6 +87,8 @@
 				return weeklyEntries;
 			case SECTIONS.FUTURE:
 				return futureEntries;
+			case SECTIONS.GENERAL:
+				return generalEntries;
 			default:
 				userMessages.addError("could not get entries object from input: ", section);
 				return null;
@@ -103,6 +106,9 @@
 				break;
 			case SECTIONS.FUTURE:
 				futureEntries = futureEntries;
+				break;
+			case SECTIONS.GENERAL:
+				generalEntries = generalEntries;
 				break;
 			default:
 				userMessages.addError("could not get entries object from input: ", section);
@@ -144,6 +150,10 @@
 				entry.Time = AutoTimeDefault;
 			else
 				entry.time = getNewTime(lastSectionEntry.time);
+		}
+
+		if (entry.date === NO_DATE) {
+			section = SECTIONS.GENERAL;
 		}
 		insertEntryToSection(section, entry, saveChanges);
 	}
@@ -247,6 +257,10 @@
 		Server is unreachable!!
 	{:else}
 		<EntryInput on:new-entry={handleNewEntry}/>
+
+		<GeneralEntries bind:entries={generalEntries}
+						on:section-change={handleSectionChanged} />
+		<SectionSeaprator/>
 
 		<TodayEntries bind:entries={dailyEntries}
 					   on:section-change={handleSectionChanged}

@@ -1,7 +1,8 @@
 export const SECTIONS = {
     DAILY: "Daily",
     UPCOMING: "Weekly",
-    FUTURE: "Future"
+    FUTURE: "Future",
+    GENERAL: "General"
 };
 
 export const SHOW_DATE = {
@@ -10,3 +11,5 @@ export const SHOW_DATE = {
     DAY: "DayName",
     FULL: "Full"
 }
+
+export const NO_DATE = "this-is-a-no-date-string";

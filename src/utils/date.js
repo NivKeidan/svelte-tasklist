@@ -1,4 +1,5 @@
 import { userMessages } from '../stores.js';
+import {NO_DATE} from './constants';
 
 const dateRegexes = [
     "in [0-9]+ day[s]?|in [0-9]+ week[s]?|in [0-9]+ month[s]?|in [0-9]+ year[s]?",
@@ -6,6 +7,7 @@ const dateRegexes = [
     "[1-9][0-9]?[./][1-9][0-2]?([./](2[0-9]{3}|[2-9][0-9]))?",
     "sunday|monday|tuesday|wednesday|thursday|friday|saturday",
     "[0-9]{8}",
+    "general",
 ]
 export const DATE_REGEX = RegExp("\\b"+combineRegexes(dateRegexes)+"\\b", "gi");
 
@@ -40,6 +42,8 @@ export function analyzeDateString(dateString) {
             return getDateByNextWeekday(5);
         case 'saturday':
             return getDateByNextWeekday(6);
+        case 'general':
+            return NO_DATE;
     }
 
     let regex = RegExp("^([0-9]{8})$");

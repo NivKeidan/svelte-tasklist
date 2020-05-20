@@ -18,6 +18,8 @@
     export let id = 0;
     export let showDate = SHOW_DATE.FULL;
     export let oneLiner = false;
+    export let isDraggable = true;
+    export let showTime = true;
     let previous = "";
     let isEditing = false;
     let isDragged = false;
@@ -72,15 +74,17 @@
 <span in:fly="{{x: -100, y: 0, duration: 750}}" out:fly|local="{{x: 100, y: 0, duration: 750}}"
       class="entry-general" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
     <Date bind:data={date} show={showDate} on:date-change={handleDateChanged}/>
-    <Time bind:data={time} on:time-change/>
+    {#if showTime}
+        <Time bind:data={time} on:time-change/>
+    {/if}
     <span class="entry-text">
         {#if isEditing}
             <form on:submit|preventDefault={handleSubmit} class="edit-entry-form">
-                <input use:inputAdded bind:value={content} on:blur={handleCancelEdit}
+                <input size={content.length*0.7} use:inputAdded bind:value={content} on:blur={handleCancelEdit}
                        on:keydown={handleKeyDown}/>
             </form>
         {:else}
-            <span draggable=true  on:click={handleEdit}
+            <span draggable={isDraggable}  on:click={handleEdit}
                   on:dragend={handleDragEnd}
                   on:dragstart|stopPropagation={handleDragStart}>{content}</span>
         {/if}
