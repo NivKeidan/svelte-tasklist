@@ -222,7 +222,7 @@
 	}
 
 	function handleNewEntry(event) {
-		let newEntry = {text: event.detail.text, id: generateNewId(),
+		let newEntry = {text: event.detail.text.trim(), id: generateNewId(),
 			date: event.detail.date, time: event.detail.time};
 		insertEntry(newEntry);
 	}
