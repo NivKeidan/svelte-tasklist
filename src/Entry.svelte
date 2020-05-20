@@ -72,7 +72,7 @@
 
 </script>
 <span in:fly="{{x: -100, y: 0, duration: 750}}" out:fly|local="{{x: 100, y: 0, duration: 750}}"
-      class="entry-general" class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
+      class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
     <Date bind:data={date} show={showDate} on:date-change={handleDateChanged}/>
     {#if showTime}
         <Time bind:data={time} on:time-change/>
@@ -80,8 +80,8 @@
     <span class="entry-text">
         {#if isEditing}
             <form on:submit|preventDefault={handleSubmit} class="edit-entry-form">
-                <input size={content.length*0.7} use:inputAdded bind:value={content} on:blur={handleCancelEdit}
-                       on:keydown={handleKeyDown}/>
+                <input size={content.length*0.6} use:inputAdded bind:value={content} on:blur={handleCancelEdit}
+                       on:keydown={handleKeyDown} class="edit-entry-input"/>
             </form>
         {:else}
             <span draggable={isDraggable}  on:click={handleEdit}

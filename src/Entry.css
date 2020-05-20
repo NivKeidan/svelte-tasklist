@@ -10,6 +10,10 @@
     display: inline-block;
 }
 
+.edit-entry-input {
+    overflow: hidden;
+}
+
 .oneLiner {
     display: inline-block !important;
     width: 100%;
