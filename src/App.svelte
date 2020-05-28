@@ -77,6 +77,10 @@
 		});
 	}
 
+	function validateSorting() {
+		Object.values(SECTIONS).forEach( s => sortSection(s));
+	}
+
 	// ---------- Utils -------------
 
 	function getEntriesObject(section) {
@@ -249,6 +253,7 @@
 	}
 
 </script>
+<svelte:window on:focus={validateSorting}/>
 <div class="app">
 	<AppStatus bind:offline={offline}/>
 	<Toast/>
