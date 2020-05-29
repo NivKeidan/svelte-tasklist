@@ -1,4 +1,4 @@
-find solution for server + make app read only
-add dragging ability to upcoming day name and make sure "last" fills up entire line
-add floating items? no time no date can be moved around and dragged into places to become regular entries
-add undo for actions
+app: make read only + presnet all data
+app: add periodic updates + online/offline sign
+app: cache data locally + integrate offline usage
+find solution for server

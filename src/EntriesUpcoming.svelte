@@ -120,37 +120,30 @@
 <style>
     .upcoming-row {
         display: grid;
-        grid-template-columns: 6% 4% auto auto;
+        grid-template-columns: 6% 94%;
         margin-bottom: 2%;
-    }
-    .no-entries {
-        grid-template-columns: 6% auto auto;
     }
     .date-grid-child-first {
         grid-column: 1;
     }
-    .date-grid-child-second {
-        grid-column: 2;
-    }
     .date-grid-child-rest {
-        grid-column: 3;
-    }
-    .date-grid-child-last {
-        grid-column: 4;
+        grid-column: 2;
+        display: flex;
+        flex-flow: row wrap;
     }
 </style>
 
 <div class="entries-upcoming">
     {#each Object.entries(datedEntries) as [date, entries], ind }
-        <div class="upcoming-row {entries.length === 0 ? 'no-entries' : ''}">
+        <div class="upcoming-row">
             <span class="date-grid-child-first">
                 <Date bind:data={date} changeable={false} show={SHOW_DATE.DAY}/>
             </span>
-            <span class="date-grid-child-second">
-                <EntrySeparator on:drag-drop={() => handleDragDrop(date, "first")} fillSpace={true}/>
-            </span>
             <span class="date-grid-child-rest">
-                {#each entries as entry (entry.id) }
+                {#each entries as entry, entryIndex (entry.id) }
+                    {#if entryIndex === 0}
+                        <EntrySeparator on:drag-drop={() => handleDragDrop(date, "first")}/>
+                    {/if}
                     <Entry on:remove-entry={handleRemoveEntry}
                            on:drag-start={handleDragStart}
                            bind:content={entry.text} bind:date={entry.date}
@@ -159,10 +152,10 @@
                            on:time-change={handleTimeChange}
                            on:text-change={handleGeneralChange}
                            showDate={SHOW_DATE.NONE}/>
-                    <EntrySeparator on:drag-drop={() => handleDragDrop(date, entry.id)}/>
+                    {#if entryIndex !== entries.length-1}
+                        <EntrySeparator on:drag-drop={() => handleDragDrop(date, entry.id)}/>
+                    {/if}
                 {/each}
-            </span>
-            <span class="date-grid-child-last">
                 <EntrySeparator on:drag-drop={() => handleDragDrop(date, "last")} fillSpace={true}/>
             </span>
         </div>

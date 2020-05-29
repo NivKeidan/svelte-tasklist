@@ -22,15 +22,12 @@
 
 <style>
     .in-line {
-        padding-left: 2%;
-        padding-right: 2%;
+        width: 4%;
     }
     .fill-space {
-        padding-right: 40%;
-        padding-left: 50%;
+        flex-grow: 100;
     }
     .dragged-on {
-        /*border: green solid 3px;*/
         background-color: lightblue;
     }
     .full-line {
@@ -46,4 +43,4 @@
       on:dragover|preventDefault
       on:drop|preventDefault={handleDragDrop}
       class:dragged-on="{dragCounter > 0}"
-      class="{ fullLine ? 'full-line' : fillSpace ? 'fill-space' : 'in-line'}" />
+     class="{ fullLine ? 'full-line' : fillSpace ? 'fill-space' : 'in-line'}"/>
