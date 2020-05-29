@@ -1,4 +1,8 @@
-app: make read only + presnet all data
-app: add periodic updates + online/offline sign
-app: cache data locally + integrate offline usage
-find solution for server
+integrate local storage on client
+integrate local storage on app
+separate paths for timestamp and proper data server
+add protection for dataserver
+production - integrate server addr in config (client and app both)
+production - build production version of client and app
+production - deploy app on phone
+add undo for web app

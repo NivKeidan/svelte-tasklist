@@ -38,8 +38,8 @@
 	}
 
 	function loadDataFromServer() {
-		fetch("http://localhost:3333").then(r => r.json()).then(data => {
-			populateSections(data);
+		fetch(process.env.data_server).then(r => r.json()).then(data => {
+			populateSections(data.data);
 			offline = false;
 			afterInitialLoad = true;
 		}).catch(e => {
@@ -49,7 +49,7 @@
 	}
 
 	function checkServerIsReachable() {
-		fetch("http://localhost:3333").then(r => {
+		fetch(process.env.data_server).then(r => {
 			if (r.ok) {
 				userMessages.addMsg("Server Connection Established!");
 				offline = false;
@@ -65,7 +65,7 @@
 
 	function saveEntries() {
 		let allEntries = getAllEntries();
-		fetch("http://localhost:3333", {
+		fetch(process.env.data_server, {
 			method: "POST",
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify(allEntries),
