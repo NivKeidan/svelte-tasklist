@@ -5,6 +5,9 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
 import replace from '@rollup/plugin-replace';
+import { Base64 } from 'js-base64';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -31,7 +34,8 @@ export default {
 			process: JSON.stringify({
 				env: {
 					isProd: production,
-					data_server: 'https://cheeky-calendar.herokuapp.com/',
+					basicAuthString: Base64.encode(process.env.username + ":" + process.env.password),
+					dataServer: process.env.dataServer,
 				}
 			}),
 		}),

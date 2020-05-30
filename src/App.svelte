@@ -4,6 +4,7 @@
 	import {getDaysFromToday} from './utils/date';
 	import {timeCompareFn, AutoTimeDefault, getNewTime} from './utils/time';
 	import { SECTIONS, NO_DATE } from './utils/constants';
+	import { getCookie, setCookie } from './utils/cookies';
 
 	import TodayEntries from './EntriesToday.svelte';
 	import UpcomingEntries from './EntriesUpcoming.svelte';
@@ -28,6 +29,7 @@
 	let highestId = 0;
 	let offline = true;
 	let afterInitialLoad = false;
+	let headers = null;
 
 	onMount( async () => {
 		loadDataFromServer();
@@ -37,19 +39,44 @@
 		checkServerIsReachable();
 	}
 
+	function loadCookie() {
+		const c = getCookie();
+		if (c !== undefined && c !== null) {
+			populateSections(JSON.parse(c));
+		}
+	}
+
+	function validateHeaders() {
+		if (headers === null) {
+			headers = new Headers();
+			headers.append('Content-Type', 'application/json');
+			headers.append('Authorization', 'Basic ' + process.env.basicAuthString);
+		}
+	}
+
 	function loadDataFromServer() {
-		fetch(process.env.data_server).then(r => r.json()).then(data => {
+		validateHeaders();
+		fetch(process.env.dataServer, {
+			method: 'GET',
+			headers: headers,
+		}).then(r => r.json()).then(data => {
 			populateSections(data.data);
 			offline = false;
 			afterInitialLoad = true;
+			setCookie(data.data);
 		}).catch(e => {
-			userMessages.addError("failed loading data", e);
+			userMessages.addError("Server unreachable. Using local date. Error:", e);
+			loadCookie();
 			setTimeout(loadDataFromServer, delayBetweenServerReachAttempts);
 		});
 	}
 
 	function checkServerIsReachable() {
-		fetch(process.env.data_server).then(r => {
+		validateHeaders();
+		fetch(process.env.dataServer, {
+			method: 'GET',
+			headers: headers
+		}).then(r => {
 			if (r.ok) {
 				userMessages.addMsg("Server Connection Established!");
 				offline = false;
@@ -60,17 +87,34 @@
 	}
 
 	function populateSections(data) {
+		clearEntries();
 		data.forEach(e => insertEntry(e, false));
+	}
+
+	function clearEntries() {
+		dailyEntries = [];
+		weeklyEntries = [];
+		futureEntries = [];
+		generalEntries = [];
 	}
 
 	function saveEntries() {
 		let allEntries = getAllEntries();
-		fetch(process.env.data_server, {
+		setCookie(allEntries);
+		validateHeaders();
+		fetch(process.env.dataServer, {
 			method: "POST",
-			headers: {'Content-Type': 'application/json'},
+			headers: headers,
 			body: JSON.stringify(allEntries),
 		}).
-		then(() => userMessages.addMsg("Saved!")).
+		then(r => {
+			if (r.ok)
+				userMessages.addMsg("Saved!")
+			else {
+				offline = true;
+				userMessages.addError("save failed");
+			}
+		}).
 		catch(err => {
 			offline = true;
 			userMessages.addError("save failed: ", err);

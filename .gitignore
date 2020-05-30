@@ -1,4 +1,5 @@
 # Directories
+*.env
 node_modules/
 dist/
 public/build

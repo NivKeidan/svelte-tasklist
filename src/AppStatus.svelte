@@ -1,5 +1,10 @@
 <script>
+    import {getCookie} from './utils/cookies';
     export let offline = true;
+
+    function printCookie() {
+        console.log(getCookie());
+    }
 </script>
 
 <style>
@@ -20,4 +25,4 @@
         background-color: GREEN;
     }
 </style>
-<span class="status-indicator" class:status-online={!offline}/>
+<span class="status-indicator" class:status-online={!offline} on:click={printCookie}/>
