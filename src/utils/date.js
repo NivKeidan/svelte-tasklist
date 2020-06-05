@@ -8,7 +8,7 @@ const dateRegexes = [
     "sunday|monday|tuesday|wednesday|thursday|friday|saturday",
     "[0-9]{8}",
     "general",
-]
+];
 export const DATE_REGEX = RegExp("\\b"+combineRegexes(dateRegexes)+"\\b", "gi");
 
 export function getDaysFromToday(n) {
@@ -196,8 +196,8 @@ function stringToDate(dateString) {
 
     let d = new Date();
     d.setFullYear(dateParts.year);
-    d.setMonth(dateParts.month-1);
     d.setDate(dateParts.day);
+    d.setMonth(dateParts.month-1);
     return d;
 }
 

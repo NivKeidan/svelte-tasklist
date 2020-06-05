@@ -23,6 +23,7 @@
 	let weeklyEntries = [];
 	let futureEntries = [];
 	let generalEntries = [];
+	let currentToday = new Date();
 
 	let dragOrigin = "";
 	let draggedEntryId = 0;
@@ -91,6 +92,11 @@
 		data.forEach(e => insertEntry(e, false));
 	}
 
+	function repopulateSections() {
+		let allEntries = getAllEntries();
+		populateSections(allEntries);
+	}
+
 	function clearEntries() {
 		dailyEntries = [];
 		weeklyEntries = [];
@@ -109,7 +115,7 @@
 		}).
 		then(r => {
 			if (r.ok)
-				userMessages.addMsg("Saved!")
+				userMessages.addMsg("Saved!");
 			else {
 				offline = true;
 				userMessages.addError("save failed");
@@ -122,7 +128,13 @@
 	}
 
 	function validateSorting() {
-		Object.values(SECTIONS).forEach( s => sortSection(s));
+		const tdy = new Date();
+		if (tdy.getDate() !== currentToday.getDate() &&
+				tdy.getFullYear() !== currentToday.getFullYear() &&
+				tdy.getMonth() !== currentToday.getMonth()) {
+			currentToday = tdy;
+			repopulateSections();
+		}
 	}
 
 	// ---------- Utils -------------
