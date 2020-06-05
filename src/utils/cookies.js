@@ -1,5 +1,5 @@
 const cookieName = "cheekyCalendarData";
-const addonString = ";samesite=strict"
+const addonString = ";samesite=strict";
 export function getCookie() {
     return document.cookie.split('; ')
         .find(row => row.startsWith(cookieName))

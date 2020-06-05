@@ -63,13 +63,12 @@
 		}).then(r => r.json()).then(data => {
 			populateSections(data.data);
 			offline = false;
-			afterInitialLoad = true;
 			setCookie(data.data);
 		}).catch(e => {
-			userMessages.addError("Server unreachable. Using local date. Error:", e);
+			userMessages.addError("Server unreachable. Using local data. Error:", e);
 			loadCookie();
-			setTimeout(loadDataFromServer, delayBetweenServerReachAttempts);
 		});
+		afterInitialLoad = true;
 	}
 
 	function checkServerIsReachable() {
