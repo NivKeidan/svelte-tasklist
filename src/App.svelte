@@ -4,7 +4,6 @@
 	import {getDaysFromToday} from './utils/date';
 	import {timeCompareFn, AutoTimeDefault, getNewTime} from './utils/time';
 	import { SECTIONS, NO_DATE } from './utils/constants';
-	import { getCookie, setCookie } from './utils/cookies';
 
 	import TodayEntries from './EntriesToday.svelte';
 	import UpcomingEntries from './EntriesUpcoming.svelte';
@@ -31,21 +30,88 @@
 	let offline = true;
 	let afterInitialLoad = false;
 	let headers = null;
+	let dataTimestamp = "0";
 
 	onMount( async () => {
-		loadDataFromServer();
+		await loadLocally();
+		await loadDataFromServer();
+		afterInitialLoad = true;
 	});
 
 	$: if (offline && afterInitialLoad) {
 		checkServerIsReachable();
 	}
 
-	function loadCookie() {
-		const c = getCookie();
-		if (c !== undefined && c !== null) {
-			populateSections(JSON.parse(c));
+	// ---------- Data Storing and Loading -------------
+
+	function saveLocally() {
+		localStorage.setItem('ts', dataTimestamp);
+		localStorage.setItem('calendarData', JSON.stringify(getAllEntries()));
+		userMessages.addMsg("Saved locally!");
+	}
+
+	function loadLocally() {
+		let ts = localStorage.getItem('ts');
+		if (ts === null || ts === undefined || ts === "")
+			return;
+		if (ts > dataTimestamp) {
+			let d = localStorage.getItem('calendarData');
+			dataTimestamp = ts;
+			populateSections(JSON.parse(d));
 		}
 	}
+
+	async function loadDataFromServer() {
+		validateHeaders();
+		await fetch(process.env.dataServer, {
+			method: 'GET',
+			headers: headers,
+		}).then(r => r.json()).then(data => {
+			offline = false;
+			if (data.timestamp > dataTimestamp) {
+				dataTimestamp = data.timestamp;
+				populateSections(data.data);
+				saveLocally();
+			}
+			else if (dataTimestamp > data.timestamp)
+				saveDataToServer();
+
+		}).catch(e => {
+			offline = true;
+			userMessages.addError("Could not load data from server. Error:", e);
+		});
+	}
+
+	function saveDataToServer() {
+		let allEntries = getAllEntries();
+		validateHeaders();
+		fetch(process.env.dataServer, {
+			method: "POST",
+			headers: headers,
+			body: JSON.stringify({
+				timestamp: dataTimestamp,
+				data: allEntries,
+			}),
+		}).
+		then(r => {
+			if (r.ok)
+				userMessages.addMsg("Saved to server!");
+			else
+				userMessages.addError("Saving to server failed. Response: ", r);
+		}).
+		catch(err => {
+			offline = true;
+			userMessages.addError("Saving to server failed: ", err);
+		});
+	}
+
+	function saveData() {
+		dataTimestamp = Date.now();
+		saveLocally();
+		saveDataToServer();
+	}
+
+	// ---------- Server Communication -------------
 
 	function validateHeaders() {
 		if (headers === null) {
@@ -53,22 +119,6 @@
 			headers.append('Content-Type', 'application/json');
 			headers.append('Authorization', 'Basic ' + process.env.basicAuthString);
 		}
-	}
-
-	function loadDataFromServer() {
-		validateHeaders();
-		fetch(process.env.dataServer, {
-			method: 'GET',
-			headers: headers,
-		}).then(r => r.json()).then(data => {
-			populateSections(data.data);
-			offline = false;
-			setCookie(data.data);
-		}).catch(e => {
-			userMessages.addError("Server unreachable. Using local data. Error:", e);
-			loadCookie();
-		});
-		afterInitialLoad = true;
 	}
 
 	function checkServerIsReachable() {
@@ -80,10 +130,44 @@
 			if (r.ok) {
 				userMessages.addMsg("Server Connection Established!");
 				offline = false;
-				saveEntries();
+				saveDataToServer();
 			} else
 				setTimeout(checkServerIsReachable, delayBetweenServerReachAttempts);
 		}).catch(() => setTimeout(checkServerIsReachable, delayBetweenServerReachAttempts))
+	}
+
+	// ---------- Data Modifying -------------
+
+	function insertEntryToSection(section, entry, saveChanges=true) {
+		let sectionObject = getEntriesObject(section);
+		sectionObject.push(entry);
+		sortSection(section);
+		updateSection(section).then(() => {
+			if (saveChanges)
+				saveData();
+		});
+	}
+
+	function insertEntry(entry, saveChanges=true) {
+		let section = SECTIONS.FUTURE;
+
+		if (entry.date <= getDaysFromToday(7))
+			section = SECTIONS.UPCOMING;
+		if (entry.date <= getDaysFromToday(0))
+			section = SECTIONS.DAILY;
+
+		if (entry.time === undefined || entry.time === null) {  // new entry, no time def
+			let lastSectionEntry = getLastEntry(section);
+			if (lastSectionEntry === undefined)
+				entry.Time = AutoTimeDefault;
+			else
+				entry.time = getNewTime(lastSectionEntry.time);
+		}
+
+		if (entry.date === NO_DATE) {
+			section = SECTIONS.GENERAL;
+		}
+		insertEntryToSection(section, entry, saveChanges);
 	}
 
 	function populateSections(data) {
@@ -96,6 +180,16 @@
 		populateSections(allEntries);
 	}
 
+	function removeEntryById(section, id, shouldSave=true) {
+		let sectionObject = getEntriesObject(section);
+		let ind = getIndexById(sectionObject, id);
+		sectionObject.splice(ind, 1);
+		updateSection(section).then( () => {
+			if (shouldSave)
+				saveData();
+		});
+	}
+
 	function clearEntries() {
 		dailyEntries = [];
 		weeklyEntries = [];
@@ -103,28 +197,30 @@
 		generalEntries = [];
 	}
 
-	function saveEntries() {
-		let allEntries = getAllEntries();
-		setCookie(allEntries);
-		validateHeaders();
-		fetch(process.env.dataServer, {
-			method: "POST",
-			headers: headers,
-			body: JSON.stringify(allEntries),
-		}).
-		then(r => {
-			if (r.ok)
-				userMessages.addMsg("Saved!");
-			else {
-				offline = true;
-				userMessages.addError("save failed");
-			}
-		}).
-		catch(err => {
-			offline = true;
-			userMessages.addError("save failed: ", err);
-		});
+	// ---------- Data Reading -------------
+
+	function getLastEntry(sectionName) {
+		const entriesObj = getEntriesObject(sectionName);
+		return entriesObj[entriesObj.length - 1];
 	}
+
+	function getAllEntries() {
+		let all = [];
+		Object.values(SECTIONS).forEach( s => {
+			getEntriesObject(s).forEach( e => {
+				all.push(e);
+			})
+		});
+		return all;
+	}
+
+	function getEntryById(section, id) {
+		let sectionObject = getEntriesObject(section);
+		let ind = getIndexById(sectionObject, id);
+		return sectionObject[ind];
+	}
+
+	// ---------- Utils -------------
 
 	function validateSorting() {
 		const tdy = new Date();
@@ -135,8 +231,6 @@
 			repopulateSections();
 		}
 	}
-
-	// ---------- Utils -------------
 
 	function getEntriesObject(section) {
 		switch (section) {
@@ -185,51 +279,13 @@
 		});
 	}
 
-	function insertEntryToSection(section, entry, saveChanges=true) {
-		let sectionObject = getEntriesObject(section);
-		sectionObject.push(entry);
-		sortSection(section);
-		updateSection(section).then(() => {
-			if (saveChanges)
-				saveEntries();
-		});
-	}
-
-	function insertEntry(entry, saveChanges=true) {
-		let section = SECTIONS.FUTURE;
-
-		if (entry.date <= getDaysFromToday(7))
-			section = SECTIONS.UPCOMING;
-		if (entry.date <= getDaysFromToday(0))
-			section = SECTIONS.DAILY;
-
-		if (entry.time === undefined || entry.time === null) {  // new entry, no time def
-			let lastSectionEntry = getLastEntry(section);
-			if (lastSectionEntry === undefined)
-				entry.Time = AutoTimeDefault;
-			else
-				entry.time = getNewTime(lastSectionEntry.time);
+	function getIndexById(arr, id) {
+		for(let i = 0; i < arr.length; i += 1) {
+			if(arr[i].id === id) {
+				return i;
+			}
 		}
-
-		if (entry.date === NO_DATE) {
-			section = SECTIONS.GENERAL;
-		}
-		insertEntryToSection(section, entry, saveChanges);
-	}
-
-	function getLastEntry(sectionName) {
-		const entriesObj = getEntriesObject(sectionName);
-		return entriesObj[entriesObj.length - 1];
-	}
-
-	function getAllEntries() {
-		let all = [];
-		Object.values(SECTIONS).forEach( s => {
-			getEntriesObject(s).forEach( e => {
-				all.push(e);
-			})
-		});
-		return all;
+		return -1;
 	}
 
 	function generateNewId() {
@@ -243,33 +299,8 @@
 			});
 			highestId = highest;
 		}
-		highestId = highestId+1
+		highestId = highestId+1;
 		return highestId;
-	}
-
-	function getIndexById(arr, id) {
-		for(let i = 0; i < arr.length; i += 1) {
-			if(arr[i].id === id) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	function removeEntryById(section, id, shouldSave=true) {
-		let sectionObject = getEntriesObject(section);
-		let ind = getIndexById(sectionObject, id);
-		sectionObject.splice(ind, 1);
-		updateSection(section).then( () => {
-			if (shouldSave)
-				saveEntries();
-		});
-	}
-
-	function getEntryById(section, id) {
-		let sectionObject = getEntriesObject(section);
-		let ind = getIndexById(sectionObject, id);
-		return sectionObject[ind];
 	}
 
 	// ---------- Event Handlers -------------
@@ -277,7 +308,7 @@
 	function handleSectionChanged(e) {
 		// Called when entry text or time has changed
 		sortSection(e.detail.section);
-		saveEntries();
+		saveData();
 	}
 
 	function handleNewEntry(event) {
@@ -310,11 +341,11 @@
 </script>
 <svelte:window on:focus={validateSorting}/>
 <div class="app">
-	<AppStatus bind:offline={offline}/>
+	<AppStatus offline={offline} lastChangeTimestamp={dataTimestamp}/>
 	<Toast/>
 	<Header/>
 	{#if !afterInitialLoad}
-		Server is unreachable!!
+		Loading data...
 	{:else}
 		<EntryInput on:new-entry={handleNewEntry}/>
 
