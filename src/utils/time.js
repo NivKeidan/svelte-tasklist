@@ -2,7 +2,7 @@ const AutoSetChar = "A";
 export const AutoTimeMin = AutoSetChar + "0000";
 export const AutoTimeMax = AutoSetChar + "9999";
 export const AutoTimeDefault = AutoSetChar + "5000";
-export const TIME_REGEX = RegExp("\\b[012][0-9][0-5][0-9]\\b", "g");
+export const TIME_REGEX = RegExp("\\b([0-1][0-9]|2[0-3])[0-5][0-9]\\b", "g");
 
 export function analyzeTimeString(timeString) {
     if (timeString !== "")
