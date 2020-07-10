@@ -1,7 +1,3 @@
-.entry {
-    /*margin-bottom: 2%;*/
-}
-
 .dragged {
     color: red;
 }
@@ -12,6 +8,7 @@
 
 .edit-entry-input {
     overflow: hidden;
+    margin-bottom: 0px !important;
 }
 
 .oneLiner {
@@ -28,6 +25,13 @@
 }
 
 .entry-text {
+    display: inline-block;
     margin-left: 3px;
     margin-right: 3px;
+}
+
+.entry-no-edit {
+    display: inline-block;
+    padding: 0.4em;
+    margin: 1px;
 }

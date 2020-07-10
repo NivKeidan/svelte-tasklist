@@ -77,18 +77,18 @@
     {#if showTime}
         <Time bind:data={time} on:time-change/>
     {/if}
-    <span class="entry-text">
+    <div class="entry-text">
         {#if isEditing}
             <form on:submit|preventDefault={handleSubmit} class="edit-entry-form">
                 <input size={content.length*0.6} use:inputAdded bind:value={content} on:blur={handleCancelEdit}
                        on:keydown={handleKeyDown} class="edit-entry-input"/>
             </form>
         {:else}
-            <span draggable={isDraggable}  on:click={handleEdit}
+            <span class="entry-no-edit" draggable={isDraggable}  on:click={handleEdit}
                   on:dragend={handleDragEnd}
                   on:dragstart|stopPropagation={handleDragStart}>{content}</span>
         {/if}
-    </span>
+    </div>
    <span on:click={handleRemove}>
        <Fa class="icon-remove-entry" icon={faTrashAlt} />
    </span>
