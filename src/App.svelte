@@ -224,8 +224,8 @@
 
 	function validateSorting() {
 		const tdy = new Date();
-		if (tdy.getDate() !== currentToday.getDate() &&
-				tdy.getFullYear() !== currentToday.getFullYear() &&
+		if (tdy.getDate() !== currentToday.getDate() ||
+				tdy.getFullYear() !== currentToday.getFullYear() ||
 				tdy.getMonth() !== currentToday.getMonth()) {
 			currentToday = tdy;
 			repopulateSections();
