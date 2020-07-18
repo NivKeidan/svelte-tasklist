@@ -70,6 +70,14 @@
         }
     }
 
+    function showLinks(text) {
+        let urlRegex = /([^\s]+) (https?:\/\/[^\s]+)/g;
+        let newText = text.replace(urlRegex, function(url, g1, g2) {
+            return '<a target="_blank" href="' + g2 + '">' + g1 + '</a>';
+        })
+        return newText;
+    }
+
 </script>
 <span in:fly="{{x: -100, y: 0, duration: 750}}"
       class:dragged="{isDragged}" class:oneLiner="{oneLiner}">
@@ -86,7 +94,7 @@
         {:else}
             <span class="entry-no-edit" draggable={isDraggable}  on:click={handleEdit}
                   on:dragend={handleDragEnd}
-                  on:dragstart|stopPropagation={handleDragStart}>{content}</span>
+                  on:dragstart|stopPropagation={handleDragStart}>{@html showLinks(content)}</span>
         {/if}
     </div>
    <span on:click={handleRemove}>
