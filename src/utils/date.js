@@ -1,17 +1,25 @@
 import { userMessages } from '../stores.js';
 import {NO_DATE} from './constants';
 
-// day: 0?[1-9]|[1-2][0-9]|3[0-1]
-// month: 1[0-2]|0?[1-9]
-// year4: 202[0-9]|2[1-9][0-9]{2}
-// year2: [2-9][0-9]
+const inXDaysRegex = "in ([1-9]+) day[s]?";
+const inXWeeksRegex = "in ([1-9]+) week[s]?";
+const inXMontsRegex = "in ([1-9]+) month[s]?";
+const inXYearsRegex = "in ([1-9]+) year[s]?";
+const relativeDaysRegex = "today|tdy|tmrw|tomorrow";
+const weekDaysRegex = "sunday|monday|tuesday|wednesday|thursday|friday|saturday";
+const generalRegex = "general";
+const numericDayMonthRegex = "(0?[1-9]|[1-2][0-9]|3[0-1])[./](1[0-2]|0?[1-9])";
+const numeric2DigitYearRegex = "[2-9][0-9]";
+const numeric4DigitYearRegex = "202[0-9]|2[1-9][0-9]{2}";
+const numericDateRegex = numericDayMonthRegex + "([./]("+numeric2DigitYearRegex+"|"+numeric4DigitYearRegex+"))?";
+
 
 const dateRegexes = [
-    "in [1-9]+ day[s]?|in [1-9]+ week[s]?|in [1-9]+ month[s]?|in [1-9]+ year[s]?",
-    "today|tdy|tmrw|tomorrow",
-    "(0?[1-9]|[1-2][0-9]|3[0-1])[./](1[0-2]|0?[1-9])([./](202[0-9]|2[1-9][0-9]{2}|[2-9][0-9]))?",
-    "sunday|monday|tuesday|wednesday|thursday|friday|saturday",
-    "general",
+    inXDaysRegex+"|"+inXWeeksRegex+"|"+inXMontsRegex+"|"+inXYearsRegex,
+    relativeDaysRegex,
+    numericDateRegex,
+    weekDaysRegex,
+    generalRegex,
 ];
 export const DATE_REGEX = RegExp("\\b"+combineRegexes(dateRegexes)+"\\b", "gi");
 
@@ -50,49 +58,60 @@ export function analyzeDateString(dateString) {
             return NO_DATE;
     }
 
-    let regex = RegExp("^in ([0-9]+) (day[s]?|month[s]?|week[s]?|year[s]?)$", "i");
-    res = dateString.match(regex);
+    let regex = RegExp("^"+inXDaysRegex+"$", "i");
+    let res = dateString.match(regex);
     if (res !== null) {
-        let timeSpan = res[2].toLowerCase();
-        if (timeSpan.indexOf("day") !== -1)
-            return getDaysFromToday(parseInt(res[1]));
-        else if (timeSpan.indexOf("month") !== -1)
-            return getMonthsFromToday(parseInt(res[1]));
-        else if (timeSpan.indexOf("year") !== -1)
-            return getYearsFromToday(parseInt(res[1]));
-        else if (timeSpan.indexOf("week") !== -1)
-            return getWeeksFromToday(parseInt(res[1]));
+        return getDaysFromToday(parseInt(res[1]));
     }
 
-    regex = RegExp("^([1-9][0-9]?)[./]([1-9][0-2]?)$", "i");
+    regex = RegExp("^"+inXWeeksRegex+"$", "i");
     res = dateString.match(regex);
     if (res !== null) {
-        let day = parseInt(res[1]);
-        let month = parseInt(res[2]);
+        return getWeeksFromToday(parseInt(res[1]));
+    }
+
+    regex = RegExp("^"+inXMontsRegex+"$", "i");
+    res = dateString.match(regex);
+    if (res !== null) {
+        return getMonthsFromToday(parseInt(res[1]));
+    }
+
+    regex = RegExp("^"+inXYearsRegex+"$", "i");
+    res = dateString.match(regex);
+    if (res !== null) {
+        return getYearsFromToday(parseInt(res[1]));
+    }
+
+    let day = 0;
+    let month = 0;
+    let year = 0;
+    regex = RegExp("^"+numericDayMonthRegex, "i");
+    res = dateString.match(regex);
+    if (res !== null) {
+        
+        day = parseInt(res[1]);
         if (day < 1 || day > 31)
             userMessages.addError("Invalid day: " + res[1]);
-        else if (month < 1 || month > 12)
+        
+            month = parseInt(res[2]);
+        if (month < 1 || month > 12) 
             userMessages.addError("Invalid month: " + res[2]);
+    }
+    regex = RegExp("("+numeric2DigitYearRegex+"|"+numeric4DigitYearRegex+")$", "i");
+    res = dateString.match(regex);
+    if (res !== null) {
+        let year = parseInt(res[1]);
+        if (year < 100 && year + 2000 < 2020)  // 2 digits
+            userMessages.addError("Invalid year: " + res[3]);
+        if (year > 999 && year < 2020)
+            userMessages.addError("Invalid year: " + res[3]);
+        
+    }
+    if (day !== 0 && month !== 0) {
+        if (year !== 0)
+            return dateByDayMonthYear(day, month, year);
         else
             return dateByDayMonth(day, month);
-    }
-
-    regex = RegExp("^([1-9][0-9]?)[./]([1-9][0-2]?)[./](2[0-9]{3}|[2-9][0-9])$", "i");
-    res = dateString.match(regex);
-    if (res !== null) {
-        let day = parseInt(res[1]);
-        let month = parseInt(res[2]);
-        let year = parseInt(res[3]);
-        if (day < 1 || day > 31)
-            userMessages.addError("Invalid day: " + res[1]);
-        else if (month < 1 || month > 12)
-            userMessages.addError("Invalid month: " + res[2]);
-        else if (year < 100 && year + 2000 < 2020)  // 2 digits
-            userMessages.addError("Invalid year: " + res[3]);
-        else if (year > 999 && year < 2020)
-            userMessages.addError("Invalid year: " + res[3]);
-        else
-            return dateByDayMonthYear(day, month, year);
     }
 
     return "";
