@@ -142,18 +142,23 @@
 		let sectionObject = getEntriesObject(section);
 		sectionObject.push(entry);
 		sortSection(section);
-		updateSection(section).then(() => {
+		updateDom(section).then(() => {
 			if (saveChanges)
 				saveData();
 		});
 	}
 
+	// Puts entry in right section and update DOM
 	function insertEntry(entry, saveChanges=true) {
 		let section = SECTIONS.FUTURE;
 
 		if (entry.date <= getDaysFromToday(7))
 			section = SECTIONS.UPCOMING;
-		if (entry.date <= getDaysFromToday(0))
+		if (entry.date < getDaysFromToday(0)) {
+			entry.date = getDaysFromToday(0);
+			saveChanges = true;
+		}
+		if (entry.date == getDaysFromToday(0))
 			section = SECTIONS.DAILY;
 
 		if (entry.time === undefined || entry.time === null) {  // new entry, no time def
@@ -184,7 +189,7 @@
 		let sectionObject = getEntriesObject(section);
 		let ind = getIndexById(sectionObject, id);
 		sectionObject.splice(ind, 1);
-		updateSection(section).then( () => {
+		updateDom(section).then( () => {
 			if (shouldSave)
 				saveData();
 		});
@@ -247,8 +252,8 @@
 				return null;
 		}
 	}
-
-	async function updateSection(section) {
+	
+	async function updateDom(section) {
 		// Weird Svelte hacks to make the dom reflect changes
 		switch (section) {
 			case SECTIONS.DAILY:
